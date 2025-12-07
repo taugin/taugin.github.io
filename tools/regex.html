@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正则表达式测试器 - 在线工具箱</title>
+  <meta name="description" content="在线正则表达式测试工具，实时查看匹配结果和捕获组。">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+  <style>
+    .tool-container {
+      max-width: 1000px;
+    }
+    textarea {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .match-highlight {
+      background-color: #fef08a;
+      padding: 0.1em 0.2em;
+      border-radius: 0.2em;
+    }
+    .group-highlight {
+      background-color: #bfdbfe;
+      padding: 0.1em 0.2em;
+      border-radius: 0.2em;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 导航栏 -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../index.html" class="flex-shrink-0 flex items-center">
+            <span class="text-2xl font-bold text-indigo-600">🛠️</span>
+            <h1 class="ml-2 text-xl font-bold text-gray-900">在线工具箱</h1>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <a href="../index.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            返回首页
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="tool-container mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">
+          正则表达式测试器
+        </h1>
+        <p class="text-lg text-gray-500">
+          在线测试正则表达式，实时查看匹配结果和捕获组
+        </p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <!-- 输入区域 -->
+        <div class="grid grid-cols-1 gap-6 p-6 border-b border-gray-200">
+          <div>
+            <label for="pattern" class="block text-sm font-medium text-gray-700 mb-1">正则表达式</label>
+            <div class="flex">
+              <div class="flex items-center px-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l-md">
+                <span class="text-gray-500">/</span>
+              </div>
+              <input 
+                type="text" 
+                id="pattern" 
+                class="flex-1 min-w-0 block w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="输入正则表达式...">
+              <div class="flex items-center px-3 bg-gray-100 border border-l-0 border-gray-300 rounded-r-md">
+                <span class="text-gray-500">/</span>
+                <input type="text" id="flags" class="ml-1 w-16 px-1 py-1 text-sm border border-gray-300 rounded" placeholder="flags" maxlength="4">
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label for="text" class="block text-sm font-medium text-gray-700">测试文本</label>
+              <button id="clearText" class="text-sm text-gray-500 hover:text-gray-700">清空</button>
+            </div>
+            <textarea 
+              id="text" 
+              rows="6" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="输入需要测试的文本..."></textarea>
+          </div>
+        </div>
+
+        <!-- 结果区域 -->
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-medium text-gray-900">匹配结果</h2>
+            <div id="status" class="text-sm"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- 高亮显示 -->
+            <div>
+              <h3 class="text-sm font-medium text-gray-700 mb-2">匹配高亮</h3>
+              <div id="highlight" class="min-h-[150px] p-4 border border-gray-300 rounded-md bg-gray-50 whitespace-pre-wrap break-words"></div>
+            </div>
+
+            <!-- 匹配详情 -->
+            <div>
+              <h3 class="text-sm font-medium text-gray-700 mb-2">匹配详情</h3>
+              <div id="matches" class="min-h-[150px] p-4 border border-gray-300 rounded-md bg-gray-50">
+                <p class="text-gray-500">请输入正则表达式和测试文本开始测试...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 使用说明 -->
+        <div class="border-t border-gray-200 p-6 bg-gray-50">
+          <h3 class="text-lg font-medium text-gray-900 mb-2">使用说明</h3>
+          <ul class="list-disc pl-5 space-y-1 text-gray-500">
+            <li>在第一个输入框中输入正则表达式（不包括开头和结尾的斜杠）</li>
+            <li>在 flags 输入框中输入标志（如 g, i, m, s 等）</li>
+            <li>在文本框中输入需要测试的文本</li>
+            <li>匹配结果会实时显示在下方，包括高亮显示和详细信息</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-white mt-12">
+    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div class="md:flex md:items-center md:justify-between">
+        <div class="flex justify-center md:justify-start">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-xl font-bold text-indigo-600">🛠️</span>
+            <h2 class="ml-2 text-lg font-bold text-gray-900">在线工具箱</h2>
+          </div>
+        </div>
+        <div class="mt-8 md:mt-0 md:order-1">
+          <p class="text-center text-base text-gray-400">
+            &copy; 2023 在线工具箱. 所有工具均为纯前端实现，数据不会上传至服务器.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 获取DOM元素
+    const patternInput = document.getElementById('pattern');
+    const flagsInput = document.getElementById('flags');
+    const textInput = document.getElementById('text');
+    const clearTextBtn = document.getElementById('clearText');
+    const highlightDiv = document.getElementById('highlight');
+    const matchesDiv = document.getElementById('matches');
+    const statusDiv = document.getElementById('status');
+
+    // 初始化一些示例数据
+    patternInput.value = '([a-zA-Z]+)@([a-zA-Z]+)\.([a-zA-Z]+)';
+    flagsInput.value = 'g';
+    textInput.value = '联系我们：support@example.com 或 sales@test.org';
+
+    // 事件监听器
+    patternInput.addEventListener('input', runTest);
+    flagsInput.addEventListener('input', runTest);
+    textInput.addEventListener('input', runTest);
+    clearTextBtn.addEventListener('click', () => {
+      textInput.value = '';
+      runTest();
+    });
+
+    // 执行测试
+    function runTest() {
+      const pattern = patternInput.value;
+      const flags = flagsInput.value;
+      const text = textInput.value;
+
+      // 清空之前的结果
+      highlightDiv.textContent = '';
+      matchesDiv.innerHTML = '';
+      statusDiv.textContent = '';
+
+      // 检查输入是否为空
+      if (!pattern || !text) {
+        highlightDiv.textContent = text || '请输入测试文本...';
+        matchesDiv.innerHTML = '<p class="text-gray-500">请输入正则表达式和测试文本开始测试...</p>';
+        return;
+      }
+
+      try {
+        // 创建正则表达式对象
+        const regex = new RegExp(pattern, flags);
+
+        // 执行匹配
+        const matches = [];
+        let match;
+
+        // 如果有全局标志，使用matchAll或者exec循环
+        if (flags.includes('g')) {
+          const allMatches = text.matchAll(new RegExp(pattern, flags.replace('g', '')));
+          for (const m of allMatches) {
+            matches.push(m);
+          }
+        } else {
+          // 单次匹配
+          match = text.match(regex);
+          if (match) {
+            matches.push(match);
+          }
+        }
+
+        // 显示状态
+        statusDiv.textContent = `找到 ${matches.length} 个匹配`;
+        statusDiv.className = matches.length > 0 ? 'text-sm text-green-600' : 'text-sm text-yellow-600';
+
+        // 显示高亮结果
+        displayHighlight(text, matches, regex);
+
+        // 显示匹配详情
+        displayMatches(matches);
+      } catch (e) {
+        // 显示错误信息
+        highlightDiv.textContent = text;
+        matchesDiv.innerHTML = `<p class="text-red-600">正则表达式错误: ${e.message}</p>`;
+        statusDiv.textContent = '正则表达式错误';
+        statusDiv.className = 'text-sm text-red-600';
+      }
+    }
+
+    // 显示高亮结果
+    function displayHighlight(text, matches, regex) {
+      if (matches.length === 0) {
+        highlightDiv.textContent = text;
+        return;
+      }
+
+      let highlightedText = '';
+      let lastIndex = 0;
+
+      matches.forEach((match, index) => {
+        // 添加匹配之前的文本
+        highlightedText += text.slice(lastIndex, match.index);
+
+        // 添加匹配的文本（带高亮）
+        const fullMatch = match[0];
+        highlightedText += `<span class="match-highlight">${escapeHtml(fullMatch)}</span>`;
+
+        lastIndex = match.index + fullMatch.length;
+      });
+
+      // 添加最后剩余的文本
+      highlightedText += text.slice(lastIndex);
+
+      highlightDiv.innerHTML = highlightedText;
+    }
+
+    // 显示匹配详情
+    function displayMatches(matches) {
+      if (matches.length === 0) {
+        matchesDiv.innerHTML = '<p class="text-gray-500">没有找到匹配项</p>';
+        return;
+      }
+
+      let html = '<div class="space-y-4">';
+      
+      matches.forEach((match, index) => {
+        html += `
+          <div class="border border-gray-200 rounded-md p-3">
+            <div class="font-medium text-gray-900 mb-2">匹配 ${index + 1}: <span class="font-mono">${escapeHtml(match[0])}</span></div>
+            <div class="text-sm">
+              <div class="text-gray-600">位置: ${match.index}-${match.index + match[0].length}</div>
+        `;
+        
+        if (match.length > 1) {
+          html += '<div class="mt-2">捕获组:</div><ul class="list-disc pl-5 space-y-1">';
+          for (let i = 1; i < match.length; i++) {
+            html += `<li class="font-mono">${i}: ${escapeHtml(match[i])}</li>`;
+          }
+          html += '</ul>';
+        }
+        
+        html += '</div></div>';
+      });
+      
+      html += '</div>';
+      matchesDiv.innerHTML = html;
+    }
+
+    // 转义HTML特殊字符
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // 初始化运行一次测试
+    runTest();
+  </script>
+</body>
+</html>

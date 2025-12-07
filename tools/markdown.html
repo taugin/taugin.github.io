@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown 转 HTML - 在线工具箱</title>
+  <meta name="description" content="在线 Markdown 转 HTML 工具，支持实时预览。">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+  <style>
+    .tool-container {
+      max-width: 1200px;
+    }
+    textarea {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    #preview {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      line-height: 1.6;
+    }
+    #preview h1 {
+      font-size: 2em;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 0.3em;
+    }
+    #preview h2 {
+      font-size: 1.5em;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 0.3em;
+    }
+    #preview h3 {
+      font-size: 1.25em;
+    }
+    #preview ul, #preview ol {
+      padding-left: 2em;
+    }
+    #preview li {
+      margin-bottom: 0.25em;
+    }
+    #preview pre {
+      background-color: #f6f8fa;
+      padding: 16px;
+      overflow: auto;
+      border-radius: 6px;
+    }
+    #preview code {
+      background-color: rgba(110,118,129,0.1);
+      padding: 0.2em 0.4em;
+      border-radius: 6px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    }
+    #preview pre code {
+      background-color: transparent;
+      padding: 0;
+    }
+    #preview blockquote {
+      margin: 0;
+      padding: 0 1em;
+      color: #57606a;
+      border-left: 0.25em solid #d0d7de;
+    }
+    #preview table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+    #preview th, #preview td {
+      padding: 6px 13px;
+      border: 1px solid #d0d7de;
+    }
+    #preview tr:nth-child(2n) {
+      background-color: #f6f8fa;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 导航栏 -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../index.html" class="flex-shrink-0 flex items-center">
+            <span class="text-2xl font-bold text-indigo-600">🛠️</span>
+            <h1 class="ml-2 text-xl font-bold text-gray-900">在线工具箱</h1>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <a href="../index.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            返回首页
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="tool-container mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">
+          Markdown 转 HTML 工具
+        </h1>
+        <p class="text-lg text-gray-500">
+          将 Markdown 文本转换为 HTML 格式，支持实时预览
+        </p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+          <!-- 输入区域 -->
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <label for="markdown" class="block text-sm font-medium text-gray-700">Markdown</label>
+              <div>
+                <button id="clearMarkdown" class="mr-2 text-sm text-gray-500 hover:text-gray-700">清空</button>
+                <button id="copyMarkdown" class="text-sm text-gray-500 hover:text-gray-700">复制</button>
+              </div>
+            </div>
+            <textarea 
+              id="markdown" 
+              rows="15" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="请输入 Markdown 文本..."># 欢迎使用 Markdown 转 HTML 工具
+
+这是一个段落，你可以在这里输入任意的 Markdown 文本。
+
+## 有序列表示例
+1. 第一项
+2. 第二项
+3. 第三项
+
+## 无序列表示例
+- 列表项一
+- 列表项二
+- 列表项三
+
+## 代码示例
+`inline code` 是行内代码。
+
+```javascript
+// 这是一段代码
+function hello() {
+  console.log("Hello, world!");
+}
+```
+
+## 引用示例
+> 这是一个引用块
+> 可以跨越多行
+
+## 表格示例
+| 列1 | 列2 | 列3 |
+| --- | --- | --- |
+| A1 | B1 | C1 |
+| A2 | B2 | C2 |
+| A3 | B3 | C3 |
+
+[链接示例](https://example.com)
+
+**粗体文本** 和 *斜体文本*</textarea>
+          </div>
+
+          <!-- 输出区域 -->
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <label class="block text-sm font-medium text-gray-700">HTML 预览</label>
+              <button id="copyHtml" class="text-sm text-gray-500 hover:text-gray-700">复制 HTML</button>
+            </div>
+            <div id="preview" class="w-full min-h-[300px] p-4 border border-gray-300 rounded-md shadow-sm overflow-auto bg-white"></div>
+            <div class="mt-4 flex space-x-4">
+              <button id="convertBtn" class="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                转换为 HTML
+              </button>
+              <button id="clearPreview" class="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                清空预览
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 使用说明 -->
+        <div class="border-t border-gray-200 p-6 bg-gray-50">
+          <h3 class="text-lg font-medium text-gray-900 mb-2">使用说明</h3>
+          <ul class="list-disc pl-5 space-y-1 text-gray-500">
+            <li>在左侧输入框输入 Markdown 文本</li>
+            <li>右侧会实时显示 HTML 预览效果</li>
+            <li>点击"转换为 HTML"按钮可获得最终的 HTML 代码</li>
+            <li>点击"复制 HTML"按钮可将 HTML 代码复制到剪贴板</li>
+            <li>支持常见的 Markdown 语法：标题、列表、代码块、引用、表格等</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-white mt-12">
+    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div class="md:flex md:items-center md:justify-between">
+        <div class="flex justify-center md:justify-start">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-xl font-bold text-indigo-600">🛠️</span>
+            <h2 class="ml-2 text-lg font-bold text-gray-900">在线工具箱</h2>
+          </div>
+        </div>
+        <div class="mt-8 md:mt-0 md:order-1">
+          <p class="text-center text-base text-gray-400">
+            &copy; 2023 在线工具箱. 所有工具均为纯前端实现，数据不会上传至服务器.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 获取DOM元素
+    const markdownTextarea = document.getElementById('markdown');
+    const previewDiv = document.getElementById('preview');
+    const convertBtn = document.getElementById('convertBtn');
+    const clearMarkdownBtn = document.getElementById('clearMarkdown');
+    const clearPreviewBtn = document.getElementById('clearPreview');
+    const copyMarkdownBtn = document.getElementById('copyMarkdown');
+    const copyHtmlBtn = document.getElementById('copyHtml');
+
+    // 简单的 Markdown 解析器
+    function markdownToHtml(markdown) {
+      let html = markdown;
+
+      // 转义 HTML 特殊字符
+      html = html
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      // 代码块 (```code```)
+      html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+
+      // 行内代码 (`code`)
+      html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+      // 引用块 (> quote)
+      html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+
+      // 无序列表 (- item 或 * item)
+      html = html.replace(/^\- (.+)$/gm, '<li>$1</li>');
+      html = html.replace(/(<li>.+<\/li>)+/gs, '<ul>$&</ul>');
+      
+      html = html.replace(/^\* (.+)$/gm, '<li>$1</li>');
+      html = html.replace(/(<li>.+<\/li>)+/gs, '<ul>$&</ul>');
+
+      // 有序列表 (1. item)
+      html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+      html = html.replace(/(<li>.+<\/li>)+/gs, '<ol>$&</ol>');
+
+      // 粗体 (**bold** 或 __bold__)
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/__(.*?)__/g, '<strong>$1</strong>');
+
+      // 斜体 (*italic* 或 _italic_)
+      html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      html = html.replace(/_(.*?)_/g, '<em>$1</em>');
+
+      // 链接 ([text](url))
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+      // 图片 (![alt](url))
+      html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+
+      // 表格 (简化处理)
+      html = html.replace(/\|(.+)\|[\s\S]*\|[-\s|]+\|[\s\S]*\|(.+)\|/g, function(match) {
+        return '<table>' + match.replace(/\|/g, '</td><td>').replace(/<\/td><td>(.*?)<\/td><td>/g, '<tr><td>$1</td><td>') + '</table>';
+      });
+      html = html.replace(/<td><\/td>/g, '<td>');
+
+      // 标题 (# Header)
+      html = html.replace(/^###### (.*$)/gm, '<h6>$1</h6>');
+      html = html.replace(/^##### (.*$)/gm, '<h5>$1</h5>');
+      html = html.replace(/^#### (.*$)/gm, '<h4>$1</h4>');
+      html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+      html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+      html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+
+      // 水平线 (---)
+      html = html.replace(/^---$/gm, '<hr>');
+
+      // 段落 (两个换行分隔)
+      html = html.replace(/\n\n/g, '</p><p>');
+      html = '<p>' + html + '</p>';
+
+      // 单个换行
+      html = html.replace(/\n/g, '<br>');
+
+      // 清理空的标签
+      html = html.replace(/<p><\/p>/g, '');
+      html = html.replace(/<p><br><\/p>/g, '');
+
+      return html;
+    }
+
+    // 实时预览
+    function updatePreview() {
+      const markdown = markdownTextarea.value;
+      previewDiv.innerHTML = markdownToHtml(markdown);
+    }
+
+    // 转换为 HTML
+    convertBtn.addEventListener('click', () => {
+      const markdown = markdownTextarea.value;
+      const html = markdownToHtml(markdown);
+      previewDiv.innerHTML = `<pre><code>${html.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;
+    });
+
+    // 清空 Markdown
+    clearMarkdownBtn.addEventListener('click', () => {
+      markdownTextarea.value = '';
+      updatePreview();
+    });
+
+    // 清空预览
+    clearPreviewBtn.addEventListener('click', () => {
+      previewDiv.innerHTML = '';
+    });
+
+    // 复制 Markdown
+    copyMarkdownBtn.addEventListener('click', () => {
+      if (markdownTextarea.value) {
+        markdownTextarea.select();
+        document.execCommand('copy');
+        const originalText = copyMarkdownBtn.textContent;
+        copyMarkdownBtn.textContent = '已复制!';
+        setTimeout(() => {
+          copyMarkdownBtn.textContent = originalText;
+        }, 2000);
+      }
+    });
+
+    // 复制 HTML
+    copyHtmlBtn.addEventListener('click', () => {
+      const html = previewDiv.innerHTML;
+      if (html) {
+        const tempTextarea = document.createElement('textarea');
+        tempTextarea.value = html;
+        document.body.appendChild(tempTextarea);
+        tempTextarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextarea);
+        
+        const originalText = copyHtmlBtn.textContent;
+        copyHtmlBtn.textContent = '已复制!';
+        setTimeout(() => {
+          copyHtmlBtn.textContent = originalText;
+        }, 2000);
+      }
+    });
+
+    // 实时更新预览
+    markdownTextarea.addEventListener('input', updatePreview);
+
+    // 初始化预览
+    updatePreview();
+  </script>
+</body>
+</html>

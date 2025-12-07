@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在线工具箱 - 实用的在线小工具集合</title>
+  <meta name="description" content="提供各种实用的在线小工具，包括JSON校验、Base64编解码、URL编解码、正则测试器、Markdown转HTML等。">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛠️</text></svg>">
+  <style>
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .search-highlight {
+      background-color: #fff3cd;
+      padding: 0.2em 0.1em;
+      border-radius: 0.2em;
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 导航栏 -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-2xl font-bold text-indigo-600">🛠️</span>
+            <h1 class="ml-2 text-xl font-bold text-gray-900">在线工具箱</h1>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <a href="#" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            关于
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- 搜索框 -->
+    <div class="text-center mb-12">
+      <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">
+        实用在线工具集合
+      </h1>
+      <p class="text-lg text-gray-500 mb-8">
+        提供各种实用的在线小工具，无需安装，即用即走
+      </p>
+      
+      <div class="max-w-2xl mx-auto">
+        <div class="relative rounded-md shadow-sm">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <input 
+            id="searchInput" 
+            type="text" 
+            class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-12 py-4 text-lg border-gray-300 rounded-md" 
+            placeholder="搜索工具..."
+          >
+          <div class="absolute inset-y-0 right-0 flex items-center">
+            <button id="clearSearch" class="hidden p-2 text-gray-400 hover:text-gray-500">
+              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 工具分类 -->
+    <div id="toolsContainer">
+      <!-- 文本处理类 -->
+      <section class="mb-12 fade-in">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+          <svg class="w-6 h-6 mr-2 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          文本处理类
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- JSON 校验工具 -->
+          <div class="tool-card bg-white rounded-lg shadow overflow-hidden transition-all duration-300">
+            <div class="p-6">
+              <div class="flex items-center mb-4">
+                <div class="flex-shrink-0 bg-indigo-100 rounded-md p-3">
+                  <svg class="w-6 h-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                  </svg>
+                </div>
+                <h3 class="ml-4 text-lg font-medium text-gray-900">JSON 校验工具</h3>
+              </div>
+              <p class="text-gray-500 text-base mb-4">
+                校验、格式化和压缩 JSON 数据，快速发现语法错误
+              </p>
+              <a href="tools/json.html" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                立即使用
+                <svg class="ml-1 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- 文本格式化工具 -->
+          <div class="tool-card bg-white rounded-lg shadow overflow-hidden transition-all duration-300">
+            <div class="p-6">
+              <div class="flex items-center mb-4">
+                <div class="flex-shrink-0 bg-green-100 rounded-md p-3">
+                  <svg class="w-6 h-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                  </svg>
+                </div>
+                <h3 class="ml-4 text-lg font-medium text-gray-900">文本格式化工具</h3>
+              </div>
+              <p class="text-gray-500 text-base mb-4">
+                大小写转换、空格处理、行处理等多种文本格式化功能
+              </p>
+              <a href="tools/text.html" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                立即使用
+                <svg class="ml-1 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 编码解码类 -->
+      <section class="mb-12 fade-in">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+          <svg class="w-6 h-6 mr-2 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          编码解码类
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Base64 编解码工具 -->
+          <div class="tool-card bg-white rounded-lg shadow overflow-hidden transition-all duration-300">
+            <div class="p-6">
+              <div class="flex items-center mb-4">
+                <div class="flex-shrink-0 bg-blue-100 rounded-md p-3">
+                  <svg class="w-6 h-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
+                </div>
+                <h3 class="ml-4 text-lg font-medium text-gray-900">Base64 编解码</h3>
+              </div>
+              <p class="text-gray-500 text-base mb-4">
+                快速进行 Base64 编码和解码操作，支持各类文本和数据
+              </p>
+              <a href="tools/base64.html" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                立即使用
+                <svg class="ml-1 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- URL 编解码工具 -->
+          <div class="tool-card bg-white rounded-lg shadow overflow-hidden transition-all duration-300">
+            <div class="p-6">
+              <div class="flex items-center mb-4">
+                <div class="flex-shrink-0 bg-purple-100 rounded-md p-3">
+                  <svg class="w-6 h-6 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                </div>
+                <h3 class="ml-4 text-lg font-medium text-gray-900">URL 编解码</h3>
+              </div>
+              <p class="text-gray-500 text-base mb-4">
+                对 URL 进行编码和解码，处理特殊字符和中文字符
+              </p>
+              <a href="tools/urlencode.html" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                立即使用
+                <svg class="ml-1 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 开发工具类 -->
+      <section class="mb-12 fade-in">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+          <svg class="w-6 h-6 mr-2 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+          </svg>
+          开发工具类
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- 正则测试器 -->
+          <div class="tool-card bg-white rounded-lg shadow overflow-hidden transition-all duration-300">
+            <div class="p-6">
+              <div class="flex items-center mb-4">
+                <div class="flex-shrink-0 bg-red-100 rounded-md p-3">
+                  <svg class="w-6 h-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                  </svg>
+                </div>
+                <h3 class="ml-4 text-lg font-medium text-gray-900">正则测试器</h3>
+              </div>
+              <p class="text-gray-500 text-base mb-4">
+                在线测试正则表达式，实时查看匹配结果和捕获组
+              </p>
+              <a href="tools/regex.html" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                立即使用
+                <svg class="ml-1 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Markdown 转 HTML -->
+          <div class="tool-card bg-white rounded-lg shadow overflow-hidden transition-all duration-300">
+            <div class="p-6">
+              <div class="flex items-center mb-4">
+                <div class="flex-shrink-0 bg-yellow-100 rounded-md p-3">
+                  <svg class="w-6 h-6 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </div>
+                <h3 class="ml-4 text-lg font-medium text-gray-900">Markdown 转 HTML</h3>
+              </div>
+              <p class="text-gray-500 text-base mb-4">
+                将 Markdown 文本转换为 HTML 格式，支持实时预览
+              </p>
+              <a href="tools/markdown.html" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                立即使用
+                <svg class="ml-1 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 搜索结果为空时显示 -->
+    <div id="noResults" class="hidden text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <h3 class="mt-2 text-xl font-medium text-gray-900">未找到相关工具</h3>
+      <p class="mt-1 text-gray-500">尝试使用其他关键词搜索</p>
+      <div class="mt-6">
+        <button id="resetSearch" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          重置搜索
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-white mt-12">
+    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div class="md:flex md:items-center md:justify-between">
+        <div class="flex justify-center md:justify-start">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-xl font-bold text-indigo-600">🛠️</span>
+            <h2 class="ml-2 text-lg font-bold text-gray-900">在线工具箱</h2>
+          </div>
+        </div>
+        <div class="mt-8 md:mt-0 md:order-1">
+          <p class="text-center text-base text-gray-400">
+            &copy; 2023 在线工具箱. 所有工具均为纯前端实现，数据不会上传至服务器.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 工具数据
+    const tools = [
+      {
+        id: 'json-validator',
+        name: 'JSON 校验工具',
+        description: '校验、格式化和压缩 JSON 数据，快速发现语法错误',
+        category: '文本处理类',
+        url: 'tools/json.html'
+      },
+      {
+        id: 'text-formatter',
+        name: '文本格式化工具',
+        description: '大小写转换、空格处理、行处理等多种文本格式化功能',
+        category: '文本处理类',
+        url: 'tools/text.html'
+      },
+      {
+        id: 'base64',
+        name: 'Base64 编解码',
+        description: '快速进行 Base64 编码和解码操作，支持各类文本和数据',
+        category: '编码解码类',
+        url: 'tools/base64.html'
+      },
+      {
+        id: 'url-encoder',
+        name: 'URL 编解码',
+        description: '对 URL 进行编码和解码，处理特殊字符和中文字符',
+        category: '编码解码类',
+        url: 'tools/urlencode.html'
+      },
+      {
+        id: 'regex-tester',
+        name: '正则测试器',
+        description: '在线测试正则表达式，实时查看匹配结果和捕获组',
+        category: '开发工具类',
+        url: 'tools/regex.html'
+      },
+      {
+        id: 'markdown-parser',
+        name: 'Markdown 转 HTML',
+        description: '将 Markdown 文本转换为 HTML 格式，支持实时预览',
+        category: '开发工具类',
+        url: 'tools/markdown.html'
+      }
+    ];
+
+    // DOM 元素
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    const resetSearch = document.getElementById('resetSearch');
+    const toolsContainer = document.getElementById('toolsContainer');
+    const noResults = document.getElementById('noResults');
+
+    // 搜索功能
+    searchInput.addEventListener('input', function(e) {
+      const searchTerm = e.target.value.trim().toLowerCase();
+      
+      // 控制清除按钮显示
+      if (searchTerm) {
+        clearSearch.classList.remove('hidden');
+      } else {
+        clearSearch.classList.add('hidden');
+      }
+
+      // 执行搜索
+      performSearch(searchTerm);
+    });
+
+    // 清除搜索
+    clearSearch.addEventListener('click', function() {
+      searchInput.value = '';
+      clearSearch.classList.add('hidden');
+      performSearch('');
+    });
+
+    // 重置搜索
+    resetSearch.addEventListener('click', function() {
+      searchInput.value = '';
+      clearSearch.classList.add('hidden');
+      performSearch('');
+    });
+
+    // 执行搜索
+    function performSearch(term) {
+      if (!term) {
+        // 显示所有工具
+        toolsContainer.classList.remove('hidden');
+        noResults.classList.add('hidden');
+        highlightText('', 'tool-name');
+        highlightText('', 'tool-description');
+        return;
+      }
+
+      // 过滤工具
+      const filteredTools = tools.filter(tool => 
+        tool.name.toLowerCase().includes(term) || 
+        tool.description.toLowerCase().includes(term) ||
+        tool.category.toLowerCase().includes(term)
+      );
+
+      if (filteredTools.length > 0) {
+        // 显示匹配的工具
+        toolsContainer.classList.remove('hidden');
+        noResults.classList.add('hidden');
+        
+        // 构建新的工具展示
+        renderFilteredTools(filteredTools, term);
+      } else {
+        // 显示无结果
+        toolsContainer.classList.add('hidden');
+        noResults.classList.remove('hidden');
+      }
+    }
+
+    // 渲染过滤后的工具
+    function renderFilteredTools(filteredTools, term) {
+      // 按分类组织工具
+      const categorizedTools = {};
+      filteredTools.forEach(tool => {
+        if (!categorizedTools[tool.category]) {
+          categorizedTools[tool.category] = [];
+        }
+        categorizedTools[tool.category].push(tool);
+      });
+
+      // 生成 HTML
+      let html = '';
+      for (const category in categorizedTools) {
+        html += `
+          <section class="mb-12 fade-in">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+              <svg class="w-6 h-6 mr-2 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${getCategoryIcon(category)}" />
+              </svg>
+              ${highlightSearchTerm(category, term)}
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        `;
+        
+        categorizedTools[category].forEach(tool => {
+          html += `
+            <div class="tool-card bg-white rounded-lg shadow overflow-hidden transition-all duration-300">
+              <div class="p-6">
+                <div class="flex items-center mb-4">
+                  <div class="flex-shrink-0 ${getToolIconBg(tool.id)} rounded-md p-3">
+                    <svg class="w-6 h-6 ${getToolIconColor(tool.id)}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${getToolIconPath(tool.id)}" />
+                    </svg>
+                  </div>
+                  <h3 id="tool-name-${tool.id}" class="ml-4 text-lg font-medium text-gray-900">
+                    ${highlightSearchTerm(tool.name, term)}
+                  </h3>
+                </div>
+                <p id="tool-description-${tool.id}" class="text-gray-500 text-base mb-4">
+                  ${highlightSearchTerm(tool.description, term)}
+                </p>
+                <a href="${tool.url}" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                  立即使用
+                  <svg class="ml-1 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          `;
+        });
+        
+        html += `
+            </div>
+          </section>
+        `;
+      }
+      
+      toolsContainer.innerHTML = html;
+    }
+
+    // 高亮搜索关键词
+    function highlightSearchTerm(text, term) {
+      if (!term) return text;
+      
+      const regex = new RegExp(`(${term})`, 'gi');
+      return text.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+
+    // 获取分类图标路径
+    function getCategoryIcon(category) {
+      switch (category) {
+        case '文本处理类':
+          return 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z';
+        case '编码解码类':
+          return 'M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z';
+        case '开发工具类':
+          return 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4';
+        default:
+          return 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z';
+      }
+    }
+
+    // 获取工具图标背景色
+    function getToolIconBg(id) {
+      const colors = {
+        'json-validator': 'bg-indigo-100',
+        'text-formatter': 'bg-green-100',
+        'base64': 'bg-blue-100',
+        'url-encoder': 'bg-purple-100',
+        'regex-tester': 'bg-red-100',
+        'markdown-parser': 'bg-yellow-100'
+      };
+      return colors[id] || 'bg-gray-100';
+    }
+
+    // 获取工具图标颜色
+    function getToolIconColor(id) {
+      const colors = {
+        'json-validator': 'text-indigo-600',
+        'text-formatter': 'text-green-600',
+        'base64': 'text-blue-600',
+        'url-encoder': 'text-purple-600',
+        'regex-tester': 'text-red-600',
+        'markdown-parser': 'text-yellow-600'
+      };
+      return colors[id] || 'text-gray-600';
+    }
+
+    // 获取工具图标路径
+    function getToolIconPath(id) {
+      const paths = {
+        'json-validator': 'M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4',
+        'text-formatter': 'M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z',
+        'base64': 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
+        'url-encoder': 'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1',
+        'regex-tester': 'M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z',
+        'markdown-parser': 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z'
+      };
+      return paths[id] || 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z';
+    }
+  </script>
+</body>
+</html>

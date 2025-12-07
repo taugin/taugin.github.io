@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文本格式化工具 - 在线工具箱</title>
+  <meta name="description" content="在线文本格式化工具，支持大小写转换、空格处理、行处理等多种文本格式化功能。">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔤</text></svg>">
+  <style>
+    .tool-container {
+      max-width: 1000px;
+    }
+    textarea {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .format-button {
+      transition: all 0.2s ease-in-out;
+    }
+    .format-button:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 导航栏 -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../index.html" class="flex-shrink-0 flex items-center">
+            <span class="text-2xl font-bold text-indigo-600">🛠️</span>
+            <h1 class="ml-2 text-xl font-bold text-gray-900">在线工具箱</h1>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <a href="../index.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            返回首页
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="tool-container mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">
+          文本格式化工具
+        </h1>
+        <p class="text-lg text-gray-500">
+          大小写转换、空格处理、行处理等多种文本格式化功能
+        </p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+          <!-- 输入区域 -->
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <label for="inputText" class="block text-sm font-medium text-gray-700">原始文本</label>
+              <button id="clearInput" class="text-sm text-gray-500 hover:text-gray-700">清空</button>
+            </div>
+            <textarea 
+              id="inputText" 
+              rows="15" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="请输入需要格式化的文本...">Hello World
+  这是一个文本格式化工具
+  支持多种格式化操作
+  例如:
+  1. 大小写转换
+  2. 空格处理
+  3. 行处理</textarea>
+          </div>
+
+          <!-- 输出区域 -->
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <label for="outputText" class="block text-sm font-medium text-gray-700">格式化结果</label>
+              <button id="copyOutput" class="text-sm text-gray-500 hover:text-gray-700">复制</button>
+            </div>
+            <textarea 
+              id="outputText" 
+              rows="15" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="格式化结果将显示在这里..." readonly></textarea>
+          </div>
+        </div>
+
+        <!-- 格式化按钮区域 -->
+        <div class="border-t border-gray-200 p-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">格式化选项</h3>
+          
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <!-- 大小写转换 -->
+            <button id="toUpperCase" class="format-button px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              转为大写
+            </button>
+            <button id="toLowerCase" class="format-button px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              转为小写
+            </button>
+            <button id="capitalize" class="format-button px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              首字母大写
+            </button>
+            <button id="titleCase" class="format-button px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              标题格式
+            </button>
+            
+            <!-- 空格处理 -->
+            <button id="removeExtraSpaces" class="format-button px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+              移除多余空格
+            </button>
+            <button id="removeAllSpaces" class="format-button px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+              移除所有空格
+            </button>
+            <button id="addSpaceAfterComma" class="format-button px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+              逗号后加空格
+            </button>
+            <button id="trimLines" class="format-button px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+              行首行尾去空格
+            </button>
+            
+            <!-- 行处理 -->
+            <button id="removeEmptyLines" class="format-button px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+              移除空行
+            </button>
+            <button id="removeDuplicateLines" class="format-button px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+              移除重复行
+            </button>
+            <button id="mergeToOneLine" class="format-button px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+              合并为一行
+            </button>
+            <button id="addLineNumbers" class="format-button px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+              添加行号
+            </button>
+            
+            <!-- 其他操作 -->
+            <button id="reverseLines" class="format-button px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+              行倒序排列
+            </button>
+            <button id="sortLines" class="format-button px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+              行排序
+            </button>
+            <button id="countStats" class="format-button px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+              统计信息
+            </button>
+            <button id="swapText" class="format-button px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+              交换输入输出
+            </button>
+          </div>
+        </div>
+
+        <!-- 使用说明 -->
+        <div class="border-t border-gray-200 p-6 bg-gray-50">
+          <h3 class="text-lg font-medium text-gray-900 mb-2">使用说明</h3>
+          <ul class="list-disc pl-5 space-y-1 text-gray-500">
+            <li>在左侧输入框输入需要格式化的文本</li>
+            <li>点击任意格式化按钮对文本进行处理</li>
+            <li>处理结果会显示在右侧输出框中</li>
+            <li>点击"复制"按钮可将结果复制到剪贴板</li>
+            <li>点击"清空"按钮可清除输入内容</li>
+            <li>"交换输入输出"按钮可将输出结果放到输入框中继续处理</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-white mt-12">
+    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div class="md:flex md:items-center md:justify-between">
+        <div class="flex justify-center md:justify-start">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-xl font-bold text-indigo-600">🛠️</span>
+            <h2 class="ml-2 text-lg font-bold text-gray-900">在线工具箱</h2>
+          </div>
+        </div>
+        <div class="mt-8 md:mt-0 md:order-1">
+          <p class="text-center text-base text-gray-400">
+            &copy; 2023 在线工具箱. 所有工具均为纯前端实现，数据不会上传至服务器.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 获取DOM元素
+    const inputText = document.getElementById('inputText');
+    const outputText = document.getElementById('outputText');
+    const clearInputBtn = document.getElementById('clearInput');
+    const copyOutputBtn = document.getElementById('copyOutput');
+    const swapTextBtn = document.getElementById('swapText');
+
+    // 大小写转换按钮
+    const toUpperCaseBtn = document.getElementById('toUpperCase');
+    const toLowerCaseBtn = document.getElementById('toLowerCase');
+    const capitalizeBtn = document.getElementById('capitalize');
+    const titleCaseBtn = document.getElementById('titleCase');
+
+    // 空格处理按钮
+    const removeExtraSpacesBtn = document.getElementById('removeExtraSpaces');
+    const removeAllSpacesBtn = document.getElementById('removeAllSpaces');
+    const addSpaceAfterCommaBtn = document.getElementById('addSpaceAfterComma');
+    const trimLinesBtn = document.getElementById('trimLines');
+
+    // 行处理按钮
+    const removeEmptyLinesBtn = document.getElementById('removeEmptyLines');
+    const removeDuplicateLinesBtn = document.getElementById('removeDuplicateLines');
+    const mergeToOneLineBtn = document.getElementById('mergeToOneLine');
+    const addLineNumbersBtn = document.getElementById('addLineNumbers');
+
+    // 其他操作按钮
+    const reverseLinesBtn = document.getElementById('reverseLines');
+    const sortLinesBtn = document.getElementById('sortLines');
+    const countStatsBtn = document.getElementById('countStats');
+
+    // 清空输入
+    clearInputBtn.addEventListener('click', () => {
+      inputText.value = '';
+      outputText.value = '';
+    });
+
+    // 复制结果
+    copyOutputBtn.addEventListener('click', () => {
+      if (outputText.value) {
+        outputText.select();
+        document.execCommand('copy');
+        // 显示复制成功提示
+        const originalText = copyOutputBtn.textContent;
+        copyOutputBtn.textContent = '已复制!';
+        setTimeout(() => {
+          copyOutputBtn.textContent = originalText;
+        }, 2000);
+      }
+    });
+
+    // 交换输入输出
+    swapTextBtn.addEventListener('click', () => {
+      const temp = inputText.value;
+      inputText.value = outputText.value;
+      outputText.value = temp;
+    });
+
+    // 转为大写
+    toUpperCaseBtn.addEventListener('click', () => {
+      outputText.value = inputText.value.toUpperCase();
+    });
+
+    // 转为小写
+    toLowerCaseBtn.addEventListener('click', () => {
+      outputText.value = inputText.value.toLowerCase();
+    });
+
+    // 首字母大写
+    capitalizeBtn.addEventListener('click', () => {
+      const text = inputText.value;
+      outputText.value = text.charAt(0).toUpperCase() + text.slice(1);
+    });
+
+    // 标题格式（每个单词首字母大写）
+    titleCaseBtn.addEventListener('click', () => {
+      const text = inputText.value.toLowerCase();
+      outputText.value = text.replace(/\w\S*/g, (word) => 
+        word.charAt(0).toUpperCase() + word.substr(1).toLowerCase()
+      );
+    });
+
+    // 移除多余空格
+    removeExtraSpacesBtn.addEventListener('click', () => {
+      outputText.value = inputText.value.replace(/\s+/g, ' ').trim();
+    });
+
+    // 移除所有空格
+    removeAllSpacesBtn.addEventListener('click', () => {
+      outputText.value = inputText.value.replace(/\s/g, '');
+    });
+
+    // 逗号后加空格
+    addSpaceAfterCommaBtn.addEventListener('click', () => {
+      outputText.value = inputText.value.replace(/,(\S)/g, ', $1');
+    });
+
+    // 行首行尾去空格
+    trimLinesBtn.addEventListener('click', () => {
+      const lines = inputText.value.split('\n');
+      const trimmedLines = lines.map(line => line.trim());
+      outputText.value = trimmedLines.join('\n');
+    });
+
+    // 移除空行
+    removeEmptyLinesBtn.addEventListener('click', () => {
+      const lines = inputText.value.split('\n');
+      const nonEmptyLines = lines.filter(line => line.trim() !== '');
+      outputText.value = nonEmptyLines.join('\n');
+    });
+
+    // 移除重复行
+    removeDuplicateLinesBtn.addEventListener('click', () => {
+      const lines = inputText.value.split('\n');
+      const uniqueLines = [...new Set(lines)];
+      outputText.value = uniqueLines.join('\n');
+    });
+
+    // 合并为一行
+    mergeToOneLineBtn.addEventListener('click', () => {
+      outputText.value = inputText.value.replace(/\n/g, ' ');
+    });
+
+    // 添加行号
+    addLineNumbersBtn.addEventListener('click', () => {
+      const lines = inputText.value.split('\n');
+      const numberedLines = lines.map((line, index) => `${index + 1}. ${line}`);
+      outputText.value = numberedLines.join('\n');
+    });
+
+    // 行倒序排列
+    reverseLinesBtn.addEventListener('click', () => {
+      const lines = inputText.value.split('\n');
+      outputText.value = lines.reverse().join('\n');
+    });
+
+    // 行排序
+    sortLinesBtn.addEventListener('click', () => {
+      const lines = inputText.value.split('\n');
+      outputText.value = lines.sort().join('\n');
+    });
+
+    // 统计信息
+    countStatsBtn.addEventListener('click', () => {
+      const text = inputText.value;
+      const lines = text.split('\n');
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const chars = text.length;
+      const charsNoSpaces = text.replace(/\s/g, '').length;
+      
+      outputText.value = `=== 文本统计信息 ===
+      
+总字符数: ${chars}
+不含空格字符数: ${charsNoSpaces}
+单词数: ${words}
+行数: ${lines.length}
+空行数: ${lines.filter(line => line.trim() === '').length}`;
+    });
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      // 可以在这里添加初始化逻辑
+    });
+  </script>
+</body>
+</html>

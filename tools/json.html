@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON 格式校验器 - 在线工具箱</title>
+  <meta name="description" content="在线 JSON 格式校验工具，支持格式化、压缩和语法检查。">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+  <style>
+    .tool-container {
+      max-width: 1000px;
+    }
+    textarea {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .success-message {
+      background-color: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    .error-message {
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .line-error {
+      background-color: #fee2e2;
+      border-left: 3px solid #ef4444;
+      padding-left: 0.5rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 导航栏 -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../index.html" class="flex-shrink-0 flex items-center">
+            <span class="text-2xl font-bold text-indigo-600">🛠️</span>
+            <h1 class="ml-2 text-xl font-bold text-gray-900">在线工具箱</h1>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <a href="../index.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            返回首页
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="tool-container mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">
+          JSON 格式校验器
+        </h1>
+        <p class="text-lg text-gray-500">
+          校验、格式化和压缩 JSON 数据，快速发现语法错误
+        </p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <!-- 输入区域 -->
+        <div class="p-6 border-b border-gray-200">
+          <div class="flex justify-between items-center mb-2">
+            <label for="jsonInput" class="block text-sm font-medium text-gray-700">JSON 输入</label>
+            <button id="clearInput" class="text-sm text-gray-500 hover:text-gray-700">清空</button>
+          </div>
+          <textarea 
+            id="jsonInput" 
+            rows="12" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder='{"name": "张三", "age": 30, "city": "北京"}'></textarea>
+          
+          <!-- 操作按钮 -->
+          <div class="mt-4 flex flex-wrap gap-3">
+            <button id="validateBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              校验 JSON
+            </button>
+            <button id="formatBtn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+              格式化
+            </button>
+            <button id="compressBtn" class="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+              压缩
+            </button>
+            <button id="copyBtn" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+              复制结果
+            </button>
+          </div>
+        </div>
+
+        <!-- 结果区域 -->
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-2">
+            <label for="resultArea" class="block text-sm font-medium text-gray-700">结果</label>
+            <div id="statusIndicator" class="text-sm"></div>
+          </div>
+          <div id="messageArea" class="hidden mb-4 p-3 rounded-md"></div>
+          <textarea 
+            id="resultArea" 
+            rows="12" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="校验结果将显示在这里..."></textarea>
+        </div>
+
+        <!-- 使用说明 -->
+        <div class="border-t border-gray-200 p-6 bg-gray-50">
+          <h3 class="text-lg font-medium text-gray-900 mb-2">使用说明</h3>
+          <ul class="list-disc pl-5 space-y-1 text-gray-500">
+            <li>在上方输入框中粘贴或输入 JSON 文本</li>
+            <li>点击"校验 JSON"按钮检查 JSON 格式是否正确</li>
+            <li>点击"格式化"按钮美化 JSON 格式，使其更易读</li>
+            <li>点击"压缩"按钮移除 JSON 中的空白字符，减小体积</li>
+            <li>点击"复制结果"按钮将输出结果复制到剪贴板</li>
+            <li>点击"清空"按钮清除输入框内容</li>
+            <li>校验出错时会显示具体的错误信息和位置</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-white mt-12">
+    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div class="md:flex md:items-center md:justify-between">
+        <div class="flex justify-center md:justify-start">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-xl font-bold text-indigo-600">🛠️</span>
+            <h2 class="ml-2 text-lg font-bold text-gray-900">在线工具箱</h2>
+          </div>
+        </div>
+        <div class="mt-8 md:mt-0 md:order-1">
+          <p class="text-center text-base text-gray-400">
+            &copy; 2023 在线工具箱. 所有工具均为纯前端实现，数据不会上传至服务器.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 获取DOM元素
+    const jsonInput = document.getElementById('jsonInput');
+    const resultArea = document.getElementById('resultArea');
+    const messageArea = document.getElementById('messageArea');
+    const statusIndicator = document.getElementById('statusIndicator');
+    const validateBtn = document.getElementById('validateBtn');
+    const formatBtn = document.getElementById('formatBtn');
+    const compressBtn = document.getElementById('compressBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const clearInputBtn = document.getElementById('clearInput');
+
+    // 初始化示例数据
+    jsonInput.value = `{ 
+  "姓名": "张三",
+  "年龄": 30,
+  "城市": "北京",
+  "爱好": ["读书", "游泳", "编程"],
+  "地址": {
+    "街道": "长安街100号",
+    "邮编": "100000"
+  }
+}`;
+
+    // 校验JSON
+    validateBtn.addEventListener('click', () => {
+      const jsonString = jsonInput.value;
+      
+      if (!jsonString.trim()) {
+        showMessage('请输入JSON数据', 'error');
+        return;
+      }
+      
+      try {
+        const parsed = JSON.parse(jsonString);
+        const formatted = JSON.stringify(parsed, null, 2);
+        resultArea.value = formatted;
+        showMessage('JSON格式正确！', 'success');
+      } catch (error) {
+        // 显示错误信息
+        const errorMessage = error.message;
+        resultArea.value = jsonString;
+        
+        // 高亮显示错误行
+        const lineMatch = errorMessage.match(/line (\d+)/);
+        if (lineMatch) {
+          const lineNumber = parseInt(lineMatch[1]);
+          highlightErrorLine(lineNumber);
+        }
+        
+        showMessage(`JSON格式错误: ${errorMessage}`, 'error');
+      }
+    });
+
+    // 格式化JSON
+    formatBtn.addEventListener('click', () => {
+      const jsonString = jsonInput.value;
+      
+      if (!jsonString.trim()) {
+        showMessage('请输入JSON数据', 'error');
+        return;
+      }
+      
+      try {
+        const parsed = JSON.parse(jsonString);
+        const formatted = JSON.stringify(parsed, null, 2);
+        resultArea.value = formatted;
+        showMessage('JSON格式化完成！', 'success');
+      } catch (error) {
+        showMessage(`JSON格式错误: ${error.message}`, 'error');
+        resultArea.value = jsonString;
+      }
+    });
+
+    // 压缩JSON
+    compressBtn.addEventListener('click', () => {
+      const jsonString = jsonInput.value;
+      
+      if (!jsonString.trim()) {
+        showMessage('请输入JSON数据', 'error');
+        return;
+      }
+      
+      try {
+        const parsed = JSON.parse(jsonString);
+        const compressed = JSON.stringify(parsed);
+        resultArea.value = compressed;
+        showMessage('JSON压缩完成！', 'success');
+      } catch (error) {
+        showMessage(`JSON格式错误: ${error.message}`, 'error');
+        resultArea.value = jsonString;
+      }
+    });
+
+    // 复制结果
+    copyBtn.addEventListener('click', () => {
+      if (resultArea.value) {
+        resultArea.select();
+        document.execCommand('copy');
+        showMessage('结果已复制到剪贴板！', 'success');
+      } else {
+        showMessage('没有可复制的内容', 'error');
+      }
+    });
+
+    // 清空输入
+    clearInputBtn.addEventListener('click', () => {
+      jsonInput.value = '';
+      resultArea.value = '';
+      messageArea.classList.add('hidden');
+      statusIndicator.textContent = '';
+      statusIndicator.className = '';
+    });
+
+    // 显示消息
+    function showMessage(message, type) {
+      messageArea.textContent = message;
+      messageArea.classList.remove('hidden');
+      
+      if (type === 'success') {
+        messageArea.className = 'mb-4 p-3 rounded-md success-message';
+        statusIndicator.textContent = '成功';
+        statusIndicator.className = 'text-sm text-green-600';
+      } else {
+        messageArea.className = 'mb-4 p-3 rounded-md error-message';
+        statusIndicator.textContent = '错误';
+        statusIndicator.className = 'text-sm text-red-600';
+      }
+    }
+
+    // 高亮错误行
+    function highlightErrorLine(lineNumber) {
+      const lines = jsonInput.value.split('\n');
+      if (lineNumber <= lines.length) {
+        lines[lineNumber - 1] = `<div class="line-error">${lines[lineNumber - 1]}</div>`;
+      }
+    }
+
+    // 页面加载完成后自动校验一次示例数据
+    document.addEventListener('DOMContentLoaded', () => {
+      validateBtn.click();
+    });
+  </script>
+</body>
+</html>
