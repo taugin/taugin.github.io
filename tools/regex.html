@@ -196,16 +196,21 @@
       try {
         // 创建正则表达式对象
         const regex = new RegExp(pattern, flags);
-
+        
         // 执行匹配
         const matches = [];
         let match;
-
-        // 如果有全局标志，使用matchAll或者exec循环
+        
+        // 如果有全局标志，使用exec循环来获取完整的匹配信息
         if (flags.includes('g')) {
-          const allMatches = text.matchAll(new RegExp(pattern, flags.replace('g', '')));
-          for (const m of allMatches) {
-            matches.push(m);
+          // 为了获取捕获组信息，我们需要使用exec而不是matchAll
+          const regexCopy = new RegExp(pattern, flags); // 创建副本以免修改原正则表达式
+          while ((match = regexCopy.exec(text)) !== null) {
+            matches.push(match);
+            // 防止无限循环（例如匹配空字符串时）
+            if (match.index === regexCopy.lastIndex) {
+              regexCopy.lastIndex++;
+            }
           }
         } else {
           // 单次匹配
