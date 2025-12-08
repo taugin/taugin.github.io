@@ -494,13 +494,6 @@
         url: 'tools/regex.html'
       },
       {
-        id: 'markdown-parser',
-        name: 'Markdown 转 HTML',
-        description: '将 Markdown 文本转换为 HTML 格式，支持实时预览',
-        category: '开发工具类',
-        url: 'tools/markdown.html'
-      },
-      {
         id: 'timestamp-converter',
         name: '时间戳转换工具',
         description: 'Unix时间戳与日期时间相互转换，获取当前时间戳',
@@ -868,7 +861,6 @@
         'base64': 'bg-blue-100',
         'url-encoder': 'bg-purple-100',
         'regex-tester': 'bg-red-100',
-        'markdown-parser': 'bg-yellow-100',
         'timestamp-converter': 'bg-teal-100',
         'md5-hash': 'bg-pink-100',
         'sha-hash': 'bg-purple-100',
@@ -888,7 +880,6 @@
         'base64': 'text-blue-600',
         'url-encoder': 'text-purple-600',
         'regex-tester': 'text-red-600',
-        'markdown-parser': 'text-yellow-600',
         'timestamp-converter': 'text-teal-600',
         'md5-hash': 'text-pink-600',
         'sha-hash': 'text-purple-600',
@@ -941,6 +932,35 @@
           </div>
         </div>
       `;
+      
+      // 添加工具使用记录功能
+      const toolLink = card.querySelector('a');
+      toolLink.addEventListener('click', function(e) {
+        // 从URL提取工具ID
+        const href = this.getAttribute('href');
+        const toolIdMatch = href.match(/tools\/([^.]+)/);
+        if (toolIdMatch) {
+          const toolId = toolIdMatch[1];
+          const toolIdMap = {
+            'json': 'json-validator',
+            'text': 'text-formatter',
+            'base64': 'base64',
+            'urlencode': 'url-encoder',
+            'regex': 'regex-tester',
+            'timestamp': 'timestamp-converter',
+            'md5': 'md5-hash',
+            'sha': 'sha-hash',
+            'radix': 'radix-converter',
+            'css-js': 'css-js-beautifier',
+            'regex-generator': 'regex-generator',
+            'string-stats': 'string-stats'
+          };
+          
+          const mappedToolId = toolIdMap[toolId] || toolId;
+          recordToolUsage(mappedToolId);
+        }
+      });
+      
       return card;
     }
 
@@ -968,9 +988,39 @@
         </div>
       `;
       
+      // 添加工具使用记录功能
+      const toolLink = card.querySelector('a');
+      toolLink.addEventListener('click', function(e) {
+        // 从URL提取工具ID
+        const href = this.getAttribute('href');
+        const toolIdMatch = href.match(/tools\/([^.]+)/);
+        if (toolIdMatch) {
+          const toolId = toolIdMatch[1];
+          const toolIdMap = {
+            'json': 'json-validator',
+            'text': 'text-formatter',
+            'base64': 'base64',
+            'urlencode': 'url-encoder',
+            'regex': 'regex-tester',
+            'timestamp': 'timestamp-converter',
+            'md5': 'md5-hash',
+            'sha': 'sha-hash',
+            'radix': 'radix-converter',
+            'css-js': 'css-js-beautifier',
+            'regex-generator': 'regex-generator',
+            'string-stats': 'string-stats'
+          };
+          
+          const mappedToolId = toolIdMap[toolId] || toolId;
+          recordToolUsage(mappedToolId);
+        }
+      });
+      
       // 添加取消收藏事件
       const favoriteIcon = card.querySelector('.favorite-icon');
-      favoriteIcon.addEventListener('click', function() {
+      favoriteIcon.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         toggleFavorite(tool.id);
         // 重新渲染
         performSearch('');
@@ -1027,7 +1077,6 @@
                   'base64': 'base64',
                   'urlencode': 'url-encoder',
                   'regex': 'regex-tester',
-                  'markdown': 'markdown-parser',
                   'timestamp': 'timestamp-converter',
                   'md5': 'md5-hash',
                   'sha': 'sha-hash',
@@ -1062,6 +1111,7 @@
                   // 添加收藏切换事件
                   favoriteIcon.addEventListener('click', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     toggleFavorite(mappedToolId);
                     
                     // 更新图标样式
@@ -1082,10 +1132,15 @@
                     }
                   });
                 }
+                
+                // 为工具链接添加点击事件，记录使用情况
+                toolLink.addEventListener('click', function(e) {
+                  recordToolUsage(mappedToolId);
+                });
               }
             }
           });
-        }, 500);
+        }, 100);
       }, 100);
     }
 
