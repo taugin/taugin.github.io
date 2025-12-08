@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTTP请求工具 - 在线工具箱</title>
+  <meta name="description" content="在线HTTP请求工具，支持GET、POST、PUT、DELETE等请求方法，可以自定义请求头和请求体。">
+  <link href="../css/tailwind.min.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2N5WRV2SNG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-2N5WRV2SNG');
+  </script>
+  <style>
+    .tool-container {
+      max-width: 1000px;
+    }
+    textarea {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .response-header {
+      background-color: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #dbeafe;
+    }
+    .response-body {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+    .error-message {
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .success-message {
+      background-color: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    .warning-message {
+      background-color: #fffbeb;
+      color: #854d0e;
+      border: 1px solid #fef3c7;
+    }
+    .header-row:not(:last-child) {
+      border-bottom: 1px solid #e5e7eb;
+    }
+    /* 进度条样式 */
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background-color: #e5e7eb;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background-color: #4f46e5;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 导航栏 -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../index.html" class="flex-shrink-0 flex items-center">
+            <span class="text-2xl font-bold text-indigo-600">🛠️</span>
+            <h1 class="ml-2 text-xl font-bold text-gray-900">在线工具箱</h1>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <a href="../index.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            返回首页
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="tool-container mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">
+          HTTP请求工具
+        </h1>
+        <p class="text-lg text-gray-500">
+          发送HTTP请求并查看响应结果，支持自定义请求方法、请求头和请求体
+        </p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg overflow-hidden mb-6">
+        <!-- 请求配置区域 -->
+        <div class="p-6 border-b border-gray-200">
+          <h2 class="text-lg font-medium text-gray-900 mb-4">请求配置</h2>
+          
+          <!-- URL 和 Method -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div class="md:col-span-1">
+              <label for="method" class="block text-sm font-medium text-gray-700 mb-1">请求方法</label>
+              <select id="method" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="PATCH">PATCH</option>
+                <option value="DELETE">DELETE</option>
+                <option value="HEAD">HEAD</option>
+                <option value="OPTIONS">OPTIONS</option>
+              </select>
+            </div>
+            <div class="md:col-span-3">
+              <label for="url" class="block text-sm font-medium text-gray-700 mb-1">URL</label>
+              <input 
+                type="text" 
+                id="url" 
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="https://api.example.com/users"
+                value="https://jsonplaceholder.typicode.com/posts">
+            </div>
+          </div>
+          
+          <!-- Headers -->
+          <div class="mb-4">
+            <div class="flex justify-between items-center mb-2">
+              <label class="block text-sm font-medium text-gray-700">请求头</label>
+              <button id="addHeader" class="text-sm text-indigo-600 hover:text-indigo-800">
+                + 添加请求头
+              </button>
+            </div>
+            <div id="headersContainer" class="border border-gray-300 rounded-md">
+              <!-- Header rows will be added here dynamically -->
+              <div class="header-row flex p-2">
+                <input type="text" placeholder="Key" class="flex-1 px-2 py-1 border border-gray-300 mr-1 text-sm">
+                <input type="text" placeholder="Value" class="flex-1 px-2 py-1 border border-gray-300 ml-1 text-sm">
+                <button class="remove-header text-red-600 ml-2 text-sm">-</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Body -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">请求体</label>
+            <textarea 
+              id="body" 
+              rows="6" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder='{&#10;  "title": "foo",&#10;  "body": "bar",&#10;  "userId": 1&#10;}'></textarea>
+          </div>
+          
+          <!-- 操作按钮 -->
+          <div class="flex flex-wrap gap-3">
+            <button id="sendRequest" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              发送请求
+            </button>
+            <button id="clearRequest" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+              清空
+            </button>
+          </div>
+          
+          <!-- 进度条 -->
+          <div id="progressContainer" class="progress-bar-container mt-4 hidden">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 响应结果区域 -->
+      <div id="responseSection" class="bg-white shadow rounded-lg overflow-hidden hidden">
+        <div class="p-6">
+          <h2 class="text-lg font-medium text-gray-900 mb-4">响应结果</h2>
+          
+          <!-- 响应状态 -->
+          <div id="responseStatus" class="mb-4 p-3 rounded-md hidden">
+          </div>
+          
+          <!-- 响应头 -->
+          <div class="mb-4">
+            <h3 class="text-md font-medium text-gray-800 mb-2">响应头</h3>
+            <div id="responseHeaders" class="p-3 rounded-md response-header whitespace-pre-wrap text-sm">
+              <!-- Response headers will be displayed here -->
+            </div>
+          </div>
+          
+          <!-- 响应体 -->
+          <div>
+            <h3 class="text-md font-medium text-gray-800 mb-2">响应体</h3>
+            <div class="mb-2 flex justify-end">
+              <button id="copyResponse" class="text-sm text-indigo-600 hover:text-indigo-800">
+                复制响应内容
+              </button>
+            </div>
+            <div id="responseBody" class="p-3 rounded-md response-body">
+              <pre class="whitespace-pre-wrap text-sm" id="responseBodyText"><!-- Response body will be displayed here --></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 使用说明 -->
+      <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <h3 class="text-md font-medium text-blue-800 mb-2">使用说明</h3>
+        <ul class="list-disc pl-5 space-y-1 text-blue-700 text-sm">
+          <li>输入要请求的URL和选择HTTP方法</li>
+          <li>添加必要的请求头（如 Content-Type: application/json）</li>
+          <li>对于POST、PUT等方法，可以在请求体中添加数据</li>
+          <li>点击"发送请求"按钮发送请求</li>
+          <li class="font-medium">注意：由于浏览器的同源策略限制，您只能请求支持CORS的接口</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // DOM元素
+      const methodSelect = document.getElementById('method');
+      const urlInput = document.getElementById('url');
+      const headersContainer = document.getElementById('headersContainer');
+      const bodyTextarea = document.getElementById('body');
+      const sendRequestBtn = document.getElementById('sendRequest');
+      const clearRequestBtn = document.getElementById('clearRequest');
+      const addHeaderBtn = document.getElementById('addHeader');
+      const responseSection = document.getElementById('responseSection');
+      const responseStatus = document.getElementById('responseStatus');
+      const responseHeaders = document.getElementById('responseHeaders');
+      const responseBodyText = document.getElementById('responseBodyText');
+      const copyResponseBtn = document.getElementById('copyResponse');
+      // 进度条元素
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      
+      // 添加请求头行
+      addHeaderBtn.addEventListener('click', function() {
+        const headerRow = document.createElement('div');
+        headerRow.className = 'header-row flex p-2';
+        headerRow.innerHTML = `
+          <input type="text" placeholder="Key" class="flex-1 px-2 py-1 border border-gray-300 mr-1 text-sm">
+          <input type="text" placeholder="Value" class="flex-1 px-2 py-1 border border-gray-300 ml-1 text-sm">
+          <button class="remove-header text-red-600 ml-2 text-sm">-</button>
+        `;
+        headersContainer.appendChild(headerRow);
+      });
+      
+      // 删除请求头行事件委托
+      headersContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-header')) {
+          if (headersContainer.children.length > 1) {
+            e.target.parentElement.remove();
+          } else {
+            // 如果是最后一个，清空内容而不是删除
+            const inputs = e.target.parentElement.querySelectorAll('input');
+            inputs[0].value = '';
+            inputs[1].value = '';
+          }
+        }
+      });
+      
+      // 清空请求配置
+      clearRequestBtn.addEventListener('click', function() {
+        urlInput.value = 'https://jsonplaceholder.typicode.com/posts';
+        methodSelect.value = 'GET';
+        bodyTextarea.value = '';
+        
+        // 保留一个空的header行
+        headersContainer.innerHTML = `
+          <div class="header-row flex p-2">
+            <input type="text" placeholder="Key" class="flex-1 px-2 py-1 border border-gray-300 mr-1 text-sm">
+            <input type="text" placeholder="Value" class="flex-1 px-2 py-1 border border-gray-300 ml-1 text-sm">
+            <button class="remove-header text-red-600 ml-2 text-sm">-</button>
+          </div>
+        `;
+        
+        // 隐藏响应区域
+        responseSection.classList.add('hidden');
+      });
+      
+      // 发送请求
+      sendRequestBtn.addEventListener('click', async function() {
+        const url = urlInput.value.trim();
+        const method = methodSelect.value;
+        
+        if (!url) {
+          alert('请输入请求URL');
+          return;
+        }
+        
+        try {
+          // 显示进度条
+          progressContainer.classList.remove('hidden');
+          progressBar.style.width = '30%';
+          
+          // 构造请求选项
+          const options = {
+            method: method,
+            headers: {}
+          };
+          
+          // 添加请求头
+          const headerRows = headersContainer.querySelectorAll('.header-row');
+          headerRows.forEach(row => {
+            const keyInput = row.querySelector('input:first-child');
+            const valueInput = row.querySelector('input:nth-child(2)');
+            const key = keyInput.value.trim();
+            const value = valueInput.value.trim();
+            
+            if (key && value) {
+              options.headers[key] = value;
+            }
+          });
+          
+          // 添加请求体（如果方法不是GET/HEAD且有内容）
+          if (!['GET', 'HEAD'].includes(method) && bodyTextarea.value.trim()) {
+            // 如果没有设置Content-Type但请求体是JSON格式，则自动设置
+            if (!options.headers['Content-Type']) {
+              try {
+                JSON.parse(bodyTextarea.value.trim());
+                options.headers['Content-Type'] = 'application/json';
+              } catch (e) {
+                // 不是有效的JSON，不自动设置Content-Type
+              }
+            }
+            
+            options.body = bodyTextarea.value;
+          }
+          
+          // 更新进度条
+          progressBar.style.width = '60%';
+          
+          // 显示正在发送的状态
+          responseStatus.className = 'mb-4 p-3 rounded-md warning-message';
+          responseStatus.textContent = '正在发送请求...';
+          responseStatus.classList.remove('hidden');
+          
+          // 发送请求
+          const startTime = Date.now();
+          const response = await fetch(url, options);
+          const endTime = Date.now();
+          
+          // 完成进度条
+          progressBar.style.width = '100%';
+          
+          // 短暂延迟后隐藏进度条
+          setTimeout(() => {
+            progressContainer.classList.add('hidden');
+            progressBar.style.width = '0%';
+          }, 300);
+          
+          // 显示响应状态
+          const statusClass = response.ok ? 'success-message' : 'error-message';
+          responseStatus.className = `mb-4 p-3 rounded-md ${statusClass}`;
+          responseStatus.innerHTML = `
+            <div class="flex justify-between">
+              <div>
+                <span class="font-medium">状态:</span> 
+                ${response.status} ${response.statusText}
+              </div>
+              <div>
+                <span class="font-medium">耗时:</span> 
+                ${endTime - startTime} ms
+              </div>
+            </div>
+          `;
+          
+          // 显示响应头
+          let headersText = '';
+          for (const [key, value] of response.headers.entries()) {
+            headersText += `${key}: ${value}\n`;
+          }
+          responseHeaders.textContent = headersText || '无响应头';
+          
+          // 显示响应体
+          const contentType = response.headers.get('content-type');
+          let responseText = await response.text();
+          
+          // 如果是JSON格式，则格式化显示
+          if (contentType && contentType.includes('application/json')) {
+            try {
+              const jsonObj = JSON.parse(responseText);
+              responseBodyText.textContent = JSON.stringify(jsonObj, null, 2);
+            } catch (e) {
+              responseBodyText.textContent = responseText;
+            }
+          } else {
+            responseBodyText.textContent = responseText;
+          }
+          
+          // 显示响应区域
+          responseSection.classList.remove('hidden');
+        } catch (error) {
+          // 隐藏进度条
+          progressContainer.classList.add('hidden');
+          progressBar.style.width = '0%';
+          
+          // 显示错误信息
+          responseStatus.className = 'mb-4 p-3 rounded-md error-message';
+          responseStatus.innerHTML = `<strong>请求失败:</strong> ${error.message}`;
+          responseStatus.classList.remove('hidden');
+          responseSection.classList.remove('hidden');
+          
+          responseHeaders.textContent = '';
+          responseBodyText.textContent = '';
+        }
+      });
+      
+      // 复制响应内容
+      copyResponseBtn.addEventListener('click', function() {
+        const textToCopy = responseBodyText.textContent;
+        if (textToCopy) {
+          navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalText = copyResponseBtn.textContent;
+            copyResponseBtn.textContent = '已复制!';
+            setTimeout(() => {
+              copyResponseBtn.textContent = originalText;
+            }, 2000);
+          }).catch(err => {
+            console.error('复制失败:', err);
+            alert('复制失败，请手动复制');
+          });
+        }
+      });
+      
+      // 初始化时添加一些常用的header示例
+      window.addEventListener('load', function() {
+        // 添加Content-Type header示例
+        const headerRow = document.createElement('div');
+        headerRow.className = 'header-row flex p-2';
+        headerRow.innerHTML = `
+          <input type="text" placeholder="Key" value="Content-Type" class="flex-1 px-2 py-1 border border-gray-300 mr-1 text-sm">
+          <input type="text" placeholder="Value" value="application/json" class="flex-1 px-2 py-1 border border-gray-300 ml-1 text-sm">
+          <button class="remove-header text-red-600 ml-2 text-sm">-</button>
+        `;
+        headersContainer.appendChild(headerRow);
+      });
+    });
+  </script>
+</body>
+</html>
