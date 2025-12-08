@@ -576,6 +576,12 @@
     const resetSearch = document.getElementById('resetSearch');
     const toolsContainer = document.getElementById('toolsContainer');
     const noResults = document.getElementById('noResults');
+    
+    // 保存原始工具容器内容
+    let originalToolsHTML = '';
+    document.addEventListener('DOMContentLoaded', function() {
+      originalToolsHTML = toolsContainer.innerHTML;
+    });
 
     // 搜索功能
     searchInput.addEventListener('input', function(e) {
@@ -702,20 +708,19 @@
 
     // 执行搜索
     function performSearch(term) {
+      // 清除之前的高亮显示
+      clearSearchHighlights();
+      
       if (!term) {
         // 显示所有工具
         toolsContainer.classList.remove('hidden');
         noResults.classList.add('hidden');
         
-        // 显示静态HTML中的工具
-        const staticSections = toolsContainer.querySelectorAll('section');
-        staticSections.forEach(section => {
-          section.style.display = 'block';
-        });
+        // 恢复原始HTML内容
+        restoreOriginalTools();
         
-        // 如果支持本地存储，显示收藏和最近使用的工具
-        showFavoriteTools();
-        showRecentTools();
+        // 重新初始化页面功能
+        initPageFeatures();
         return;
       }
 
@@ -730,12 +735,6 @@
         // 显示匹配的工具
         toolsContainer.classList.remove('hidden');
         noResults.classList.add('hidden');
-        
-        // 隐藏静态HTML中的工具
-        const staticSections = toolsContainer.querySelectorAll('section');
-        staticSections.forEach(section => {
-          section.style.display = 'none';
-        });
         
         // 构建新的工具展示
         renderFilteredTools(filteredTools, term);
@@ -844,6 +843,23 @@
       } catch (e) {
         console.error('Error highlighting search term:', e);
         return text;
+      }
+    }
+
+    // 清除搜索高亮
+    function clearSearchHighlights() {
+      const highlightedElements = document.querySelectorAll('.search-highlight');
+      highlightedElements.forEach(element => {
+        const parent = element.parentNode;
+        parent.replaceChild(document.createTextNode(element.textContent), element);
+        parent.normalize(); // 合并相邻的文本节点
+      });
+    }
+
+    // 恢复原始工具内容
+    function restoreOriginalTools() {
+      if (originalToolsHTML) {
+        toolsContainer.innerHTML = originalToolsHTML;
       }
     }
 
@@ -1014,33 +1030,8 @@
       }
     }
 
-    // 添加键盘快捷键支持
-    document.addEventListener('keydown', function(e) {
-      // Ctrl/Cmd + K 聚焦到搜索框
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        searchInput.focus();
-        searchInput.select();
-      }
-      
-      // Ctrl/Cmd + / 显示快捷键帮助
-      if ((e.ctrlKey || e.metaKey) && e.key === '/') {
-        e.preventDefault();
-        alert('快捷键列表:\nCtrl/Cmd + K: 聚焦搜索框\nCtrl/Cmd + /: 显示此帮助\nEsc: 清除搜索');
-      }
-      
-      // Esc 清除搜索
-      if (e.key === 'Escape') {
-        if (searchInput.value) {
-          searchInput.value = '';
-          clearSearch.classList.add('hidden');
-          performSearch('');
-        }
-      }
-    });
-
-    // 页面加载完成后初始化
-    document.addEventListener('DOMContentLoaded', function() {
+    // 初始化页面功能
+    function initPageFeatures() {
       // 显示收藏和最近使用的工具
       showFavoriteTools();
       showRecentTools();
@@ -1164,7 +1155,41 @@
             }
           });
         }, 500);
-      }, 1000);
+      }, 100);
+    }
+
+    // 添加键盘快捷键支持
+    document.addEventListener('keydown', function(e) {
+      // Ctrl/Cmd + K 聚焦到搜索框
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      }
+      
+      // Ctrl/Cmd + / 显示快捷键帮助
+      if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+        e.preventDefault();
+        alert('快捷键列表:\nCtrl/Cmd + K: 聚焦搜索框\nCtrl/Cmd + /: 显示此帮助\nEsc: 清除搜索');
+      }
+      
+      // Esc 清除搜索
+      if (e.key === 'Escape') {
+        if (searchInput.value) {
+          searchInput.value = '';
+          clearSearch.classList.add('hidden');
+          performSearch('');
+        }
+      }
+    });
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      // 保存原始工具容器内容
+      originalToolsHTML = toolsContainer.innerHTML;
+      
+      // 初始化页面功能
+      initPageFeatures();
     });
 
   </script>
