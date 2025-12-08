@@ -1041,6 +1041,10 @@
 
     // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', function() {
+      // 显示收藏和最近使用的工具
+      showFavoriteTools();
+      showRecentTools();
+      
       // 延迟执行以确保DOM完全加载
       setTimeout(() => {
         const toolLinks = document.querySelectorAll('a[href^="tools/"]');
