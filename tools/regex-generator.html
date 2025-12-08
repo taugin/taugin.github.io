@@ -7,6 +7,15 @@
   <meta name="description" content="在线正则表达式生成器工具，帮助您快速创建常用的正则表达式模式。">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2N5WRV2SNG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-2N5WRV2SNG');
+  </script>
   <style>
     .tool-container {
       max-width: 1000px;
@@ -279,7 +288,7 @@
 
     // 转义正则表达式特殊字符
     function escapeRegExp(string) {
-      return string.replace(/[.*+?^${}()|[\\]\\/]/g, '\\$&');
+      return string.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
     }
 
     // 清空
