@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS/JS压缩美化工具 - 在线工具箱</title>
+  <meta name="description" content="在线CSS/JS压缩美化工具，支持CSS和JavaScript代码的压缩与格式化。">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
+  <style>
+    .tool-container {
+      max-width: 1000px;
+    }
+    textarea {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .format-button {
+      transition: all 0.2s ease-in-out;
+    }
+    .format-button:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 导航栏 -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../index.html" class="flex-shrink-0 flex items-center">
+            <span class="text-2xl font-bold text-indigo-600">🛠️</span>
+            <h1 class="ml-2 text-xl font-bold text-gray-900">在线工具箱</h1>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <a href="../index.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            返回首页
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="tool-container mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">
+          CSS/JS压缩美化工具
+        </h1>
+        <p class="text-lg text-gray-500">
+          支持CSS和JavaScript代码的压缩与格式化
+        </p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+          <!-- 输入区域 -->
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <label for="inputText" class="block text-sm font-medium text-gray-700">输入代码</label>
+              <button id="clearInput" class="text-sm text-gray-500 hover:text-gray-700">清空</button>
+            </div>
+            <textarea 
+              id="inputText" 
+              rows="15" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="请输入CSS或JavaScript代码..."></textarea>
+          </div>
+
+          <!-- 输出区域 -->
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <label for="outputText" class="block text-sm font-medium text-gray-700">处理结果</label>
+              <button id="copyOutput" class="text-sm text-gray-500 hover:text-gray-700">复制</button>
+            </div>
+            <textarea 
+              id="outputText" 
+              rows="15" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="处理结果将显示在这里..." readonly></textarea>
+          </div>
+        </div>
+
+        <!-- 处理按钮区域 -->
+        <div class="border-t border-gray-200 p-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">处理选项</h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <button id="beautifyCSS" class="format-button px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              美化CSS
+            </button>
+            <button id="compressCSS" class="format-button px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+              压缩CSS
+            </button>
+            <button id="beautifyJS" class="format-button px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+              美化JS
+            </button>
+            <button id="compressJS" class="format-button px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+              压缩JS
+            </button>
+          </div>
+        </div>
+
+        <!-- 使用说明 -->
+        <div class="border-t border-gray-200 p-6 bg-gray-50">
+          <h3 class="text-lg font-medium text-gray-900 mb-2">使用说明</h3>
+          <ul class="list-disc pl-5 space-y-1 text-gray-500">
+            <li>在左侧输入框粘贴需要处理的CSS或JavaScript代码</li>
+            <li>点击相应按钮进行美化或压缩处理</li>
+            <li>美化操作会使代码格式更易读，增加适当的缩进和换行</li>
+            <li>压缩操作会移除所有不必要的空格、换行和注释，减小文件体积</li>
+            <li>点击"复制"按钮可将结果复制到剪贴板</li>
+            <li>点击"清空"按钮可清除输入内容</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-white mt-12">
+    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div class="md:flex md:items-center md:justify-between">
+        <div class="flex justify-center md:justify-start">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-xl font-bold text-indigo-600">🛠️</span>
+            <h2 class="ml-2 text-lg font-bold text-gray-900">在线工具箱</h2>
+          </div>
+        </div>
+        <div class="mt-8 md:mt-0 md:order-1">
+          <p class="text-center text-base text-gray-400">
+            &copy; 2023 在线工具箱. 所有工具均为纯前端实现，数据不会上传至服务器.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 获取DOM元素
+    const inputText = document.getElementById('inputText');
+    const outputText = document.getElementById('outputText');
+    const clearInputBtn = document.getElementById('clearInput');
+    const copyOutputBtn = document.getElementById('copyOutput');
+
+    // 处理按钮
+    const beautifyCSSBtn = document.getElementById('beautifyCSS');
+    const compressCSSBtn = document.getElementById('compressCSS');
+    const beautifyJSBtn = document.getElementById('beautifyJS');
+    const compressJSBtn = document.getElementById('compressJS');
+
+    // 清空输入
+    clearInputBtn.addEventListener('click', () => {
+      inputText.value = '';
+      outputText.value = '';
+    });
+
+    // 复制结果
+    copyOutputBtn.addEventListener('click', () => {
+      if (outputText.value) {
+        outputText.select();
+        document.execCommand('copy');
+        // 显示复制成功提示
+        const originalText = copyOutputBtn.textContent;
+        copyOutputBtn.textContent = '已复制!';
+        setTimeout(() => {
+          copyOutputBtn.textContent = originalText;
+        }, 2000);
+      }
+    });
+
+    // 美化CSS
+    beautifyCSSBtn.addEventListener('click', () => {
+      const input = inputText.value;
+      
+      if (!input) {
+        outputText.value = '请输入CSS代码';
+        return;
+      }
+      
+      try {
+        // 简单的CSS美化实现
+        let formatted = input.replace(/;/g, ';\n')
+                            .replace(/{/g, ' {\n')
+                            .replace(/}/g, '\n}\n')
+                            .replace(/,/g, ', ')
+                            .replace(/\n\s*\n/g, '\n');
+        
+        // 简单的缩进处理
+        let lines = formatted.split('\n');
+        let indent = 0;
+        let result = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+          let line = lines[i].trim();
+          if (line) {
+            if (line.includes('}')) {
+              indent--;
+            }
+            
+            result.push('  '.repeat(Math.max(0, indent)) + line);
+            
+            if (line.includes('{')) {
+              indent++;
+            }
+          }
+        }
+        
+        outputText.value = result.join('\n');
+      } catch (error) {
+        outputText.value = '处理出错: ' + error.message;
+      }
+    });
+
+    // 压缩CSS
+    compressCSSBtn.addEventListener('click', () => {
+      const input = inputText.value;
+      
+      if (!input) {
+        outputText.value = '请输入CSS代码';
+        return;
+      }
+      
+      try {
+        // 简单的CSS压缩实现
+        let compressed = input.replace(/\/\*[\s\S]*?\*\//g, '') // 移除注释
+                              .replace(/\s+/g, ' ')             // 合并多个空格
+                              .replace(/\s*{\s*/g, '{')         // 移除 { 前后的空格
+                              .replace(/\s*}\s*/g, '}')         // 移除 } 前后的空格
+                              .replace(/\s*;\s*/g, ';')         // 移除 ; 前后的空格
+                              .replace(/\s*,\s*/g, ',')         // 移除 , 前后的空格
+                              .trim();
+        
+        outputText.value = compressed;
+      } catch (error) {
+        outputText.value = '处理出错: ' + error.message;
+      }
+    });
+
+    // 美化JS
+    beautifyJSBtn.addEventListener('click', () => {
+      const input = inputText.value;
+      
+      if (!input) {
+        outputText.value = '请输入JavaScript代码';
+        return;
+      }
+      
+      try {
+        // 简单的JS美化实现
+        let formatted = input.replace(/;/g, ';\n')
+                            .replace(/{/g, ' {\n')
+                            .replace(/}/g, '\n}\n')
+                            .replace(/,/g, ', ')
+                            .replace(/\n\s*\n/g, '\n')
+                            .replace(/(if|for|while|switch|function|else)\s*\(/g, '$1 (')
+                            .replace(/\)\s*{/g, ') {');
+        
+        // 简单的缩进处理
+        let lines = formatted.split('\n');
+        let indent = 0;
+        let result = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+          let line = lines[i].trim();
+          if (line) {
+            // 减少缩进的情况
+            if (line.includes('}') || line.startsWith('case ') || line.startsWith('default:')) {
+              indent--;
+            }
+            
+            result.push('  '.repeat(Math.max(0, indent)) + line);
+            
+            // 增加缩进的情况
+            if (line.includes('{') || line.endsWith(':') || 
+               line.startsWith('if ') || line.startsWith('for ') || line.startsWith('while ') ||
+               line.startsWith('switch ') || line.startsWith('function ')) {
+              indent++;
+            }
+          }
+        }
+        
+        outputText.value = result.join('\n');
+      } catch (error) {
+        outputText.value = '处理出错: ' + error.message;
+      }
+    });
+
+    // 压缩JS
+    compressJSBtn.addEventListener('click', () => {
+      const input = inputText.value;
+      
+      if (!input) {
+        outputText.value = '请输入JavaScript代码';
+        return;
+      }
+      
+      try {
+        // 简单的JS压缩实现
+        let compressed = input.replace(/\/\*[\s\S]*?\*\//g, '') // 移除多行注释
+                              .replace(/\/\/.*$/gm, '')         // 移除单行注释
+                              .replace(/\s+/g, ' ')             // 合并多个空格
+                              .replace(/\s*{\s*/g, '{')         // 移除 { 前后的空格
+                              .replace(/\s*}\s*/g, '}')         // 移除 } 前后的空格
+                              .replace(/\s*;\s*/g, ';')         // 移除 ; 前后的空格
+                              .replace(/\s*,\s*/g, ',')         // 移除 , 前后的空格
+                              .replace(/\s*=\s*/g, '=')         // 移除 = 前后的空格
+                              .replace(/\s*\+\s*/g, '+')        // 移除 + 前后的空格
+                              .replace(/\s*-\s*/g, '-')         // 移除 - 前后的空格
+                              .trim();
+        
+        outputText.value = compressed;
+      } catch (error) {
+        outputText.value = '处理出错: ' + error.message;
+      }
+    });
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      // 可以在这里添加初始化逻辑
+    });
+  </script>
+</body>
+</html>

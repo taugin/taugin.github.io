@@ -353,6 +353,51 @@
     // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', () => {
       // 可以在这里添加初始化逻辑
+      
+      // 记录工具使用
+      if (window.localStorage) {
+        try {
+          const recentToolsData = localStorage.getItem('recentTools');
+          let recentTools = recentToolsData ? JSON.parse(recentToolsData) : [];
+          
+          // 移除已存在的相同工具
+          recentTools = recentTools.filter(id => id !== 'text-formatter');
+          
+          // 添加到数组开头
+          recentTools.unshift('text-formatter');
+          
+          // 保持最多6个工具
+          if (recentTools.length > 6) {
+            recentTools = recentTools.slice(0, 6);
+          }
+          
+          // 保存到本地存储
+          localStorage.setItem('recentTools', JSON.stringify(recentTools));
+        } catch (e) {
+          console.error('Error recording tool usage:', e);
+        }
+      }
+      
+      // 添加键盘快捷键支持
+      document.addEventListener('keydown', function(e) {
+        // Ctrl/Cmd + Enter 执行默认操作（转为大写）
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          toUpperCaseBtn.click();
+        }
+        
+        // Ctrl/Cmd + Shift + C 清空输入
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
+          e.preventDefault();
+          clearInputBtn.click();
+        }
+        
+        // Ctrl/Cmd + Shift + V 交换输入输出
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'V') {
+          e.preventDefault();
+          swapTextBtn.click();
+        }
+      });
     });
   </script>
 </body>
