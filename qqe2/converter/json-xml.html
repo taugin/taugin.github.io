@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON-XML互转工具 - 奇Q工具网</title>
+    <meta name="description" content="在线JSON与XML格式互转工具，支持JSON转XML和XML转JSON，方便开发者在两种数据格式间转换。">
+    <meta name="keywords" content="JSON转XML,XML转JSON,数据格式转换,在线工具,开发工具">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://qqe2.com/converter/json-xml.html">
+    <meta property="og:title" content="JSON-XML互转工具 - 奇Q工具网">
+    <meta property="og:description" content="在线JSON与XML格式互转工具，支持JSON转XML和XML转JSON，方便开发者在两种数据格式间转换。">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://qqe2.com/converter/json-xml.html">
+    <meta property="twitter:title" content="JSON-XML互转工具 - 奇Q工具网">
+    <meta property="twitter:description" content="在线JSON与XML格式互转工具，支持JSON转XML和XML转JSON，方便开发者在两种数据格式间转换。">
+    
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/fast-xml-parser@4.2.5/src/fxp.min.js"></script>
+    <style>
+        textarea {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <h1 class="text-xl font-bold text-blue-600"><a href="../index.html">奇Q工具网</a></h1>
+            </div>
+            <nav class="hidden md:block">
+                <ul class="flex space-x-6">
+                    <li><a href="../json/" class="text-gray-600 hover:text-blue-600">JSON工具</a></li>
+                    <li><a href="../encoder/" class="text-gray-600 hover:text-blue-600">编码解码</a></li>
+                    <li><a href="../formatter/" class="text-gray-600 hover:text-blue-600">格式化工具</a></li>
+                    <li><a href="../dev/" class="text-gray-600 hover:text-blue-600">开发工具</a></li>
+                    <li><a href="#" class="text-blue-600 font-bold">转换工具</a></li>
+                </ul>
+            </nav>
+            <button class="md:hidden text-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="container mx-auto px-4 py-4">
+        <nav class="text-sm text-gray-600">
+            <a href="../index.html" class="hover:underline">首页</a> >
+            <a href="index.html" class="hover:underline">转换工具</a> >
+            <span class="text-gray-900">JSON-XML互转</span>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">JSON-XML互转工具</h1>
+        <p class="text-gray-600 mb-8">在线JSON与XML格式互转工具，支持JSON转XML和XML转JSON，方便开发者在两种数据格式间转换。</p>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex flex-wrap gap-2 mb-4">
+                <button id="jsonToXmlBtn" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300">JSON转XML</button>
+                <button id="xmlToJsonBtn" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300">XML转JSON</button>
+                <button id="clearBtn" class="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition duration-300">清空</button>
+                <button id="copyBtn" class="bg-yellow-600 text-white py-2 px-4 rounded hover:bg-yellow-700 transition duration-300">复制结果</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="inputData" class="block text-gray-700 font-bold mb-2">输入数据:</label>
+                    <textarea id="inputData" rows="15" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入JSON或XML数据"></textarea>
+                </div>
+                
+                <div>
+                    <label for="outputData" class="block text-gray-700 font-bold mb-2">输出结果:</label>
+                    <textarea id="outputData" rows="15" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" readonly></textarea>
+                </div>
+            </div>
+            
+            <div id="message" class="mt-4 p-3 rounded hidden"></div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">工具说明</h2>
+            <div class="prose max-w-none">
+                <h3>功能介绍</h3>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>JSON转XML</strong>: 将JSON格式数据转换为XML格式</li>
+                    <li><strong>XML转JSON</strong>: 将XML格式数据转换为JSON格式</li>
+                    <li><strong>清空</strong>: 清除输入和输出内容</li>
+                    <li><strong>复制结果</strong>: 将输出结果复制到剪贴板</li>
+                </ul>
+                
+                <h3 class="mt-4">使用方法</h3>
+                <ol class="list-decimal pl-5 space-y-2">
+                    <li>在输入框中粘贴或输入需要转换的JSON或XML数据</li>
+                    <li>点击"JSON转XML"或"XML转JSON"按钮进行转换</li>
+                    <li>查看输出结果</li>
+                    <li>可点击"复制结果"按钮将结果复制到剪贴板</li>
+                </ol>
+                
+                <h3 class="mt-4">应用场景</h3>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>API接口数据格式转换</li>
+                    <li>系统间数据交换</li>
+                    <li>配置文件格式迁移</li>
+                    <li>数据分析和处理</li>
+                </ul>
+                
+                <h3 class="mt-4">注意事项</h3>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>复杂的嵌套结构可能会导致转换结果不如预期</li>
+                    <li>某些XML属性在转换为JSON时可能会丢失</li>
+                    <li>所有转换都在浏览器端完成，不会上传任何数据到服务器</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-gray-400">
+                <p>&copy; 2025 奇Q工具网. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputData = document.getElementById('inputData');
+            const outputData = document.getElementById('outputData');
+            const jsonToXmlBtn = document.getElementById('jsonToXmlBtn');
+            const xmlToJsonBtn = document.getElementById('xmlToJsonBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const message = document.getElementById('message');
+            
+            // JSON转XML
+            jsonToXmlBtn.addEventListener('click', function() {
+                if (!inputData.value) {
+                    showMessage('请输入需要转换的JSON数据', 'bg-yellow-100 text-yellow-700');
+                    return;
+                }
+                
+                try {
+                    const jsonObj = JSON.parse(inputData.value);
+                    
+                    // 使用fxparser进行转换
+                    const parser = new fxparser.XMLBuilder({
+                        arrayNodeName: "item",
+                        ignoreAttributes: false,
+                        format: true
+                    });
+                    
+                    const xml = parser.build(jsonObj);
+                    outputData.value = xml;
+                    showMessage('JSON转XML成功！', 'bg-green-100 text-green-700');
+                } catch (e) {
+                    // 如果是JSON解析错误
+                    if (e instanceof SyntaxError) {
+                        showMessage('JSON格式错误，请检查输入数据', 'bg-red-100 text-red-700');
+                    } else {
+                        showMessage('转换出错: ' + e.message, 'bg-red-100 text-red-700');
+                    }
+                }
+            });
+            
+            // XML转JSON
+            xmlToJsonBtn.addEventListener('click', function() {
+                if (!inputData.value) {
+                    showMessage('请输入需要转换的XML数据', 'bg-yellow-100 text-yellow-700');
+                    return;
+                }
+                
+                try {
+                    // 使用fxparser进行转换
+                    const parser = new fxparser.XMLParser({
+                        ignoreAttributes: false,
+                        parseAttributeValue: true,
+                        parseTagValue: true,
+                        trimValues: true
+                    });
+                    
+                    const jsonObj = parser.parse(inputData.value);
+                    outputData.value = JSON.stringify(jsonObj, null, 2);
+                    showMessage('XML转JSON成功！', 'bg-green-100 text-green-700');
+                } catch (e) {
+                    showMessage('转换出错: ' + e.message, 'bg-red-100 text-red-700');
+                }
+            });
+            
+            // 清空输入输出
+            clearBtn.addEventListener('click', function() {
+                inputData.value = '';
+                outputData.value = '';
+                showMessage('已清空输入输出内容', 'bg-blue-100 text-blue-700');
+            });
+            
+            // 复制结果
+            copyBtn.addEventListener('click', function() {
+                if (outputData.value) {
+                    outputData.select();
+                    document.execCommand('copy');
+                    showMessage('结果已复制到剪贴板', 'bg-green-100 text-green-700');
+                } else {
+                    showMessage('没有内容可复制', 'bg-yellow-100 text-yellow-700');
+                }
+            });
+            
+            // 显示消息
+            function showMessage(text, classes) {
+                message.textContent = text;
+                message.className = 'mt-4 p-3 rounded ' + classes;
+                message.classList.remove('hidden');
+                
+                // 3秒后自动隐藏消息
+                setTimeout(function() {
+                    message.classList.add('hidden');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

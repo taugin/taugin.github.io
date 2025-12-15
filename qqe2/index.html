@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇Q工具网 - 在线JSON编辑器和开发工具集合</title>
+    <meta name="description" content="奇Q工具网提供JSON在线编辑器、格式化、压缩、校验，以及Base64编码解码、URL编码解码、正则表达式测试等开发工具，所有操作均在浏览器端完成，保障数据安全。">
+    <meta name="keywords" content="在线,JSON,JSON校验,JSON在线编辑器,JSON编辑,JSON格式化,JSON工具,JS,js加密,JSON教程,Cron生成,Cron,JSON解析,JSON转换,在线JSON解析,JSON数据">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://qqe2.com/">
+    <meta property="og:title" content="奇Q工具网 - 在线JSON编辑器和开发工具集合">
+    <meta property="og:description" content="奇Q工具网提供JSON在线编辑器、格式化、压缩、校验，以及Base64编码解码、URL编码解码、正则表达式测试等开发工具，所有操作均在浏览器端完成，保障数据安全。">
+    <meta property="og:image" content="https://qqe2.com/images/logo.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://qqe2.com/">
+    <meta property="twitter:title" content="奇Q工具网 - 在线JSON编辑器和开发工具集合">
+    <meta property="twitter:description" content="奇Q工具网提供JSON在线编辑器、格式化、压缩、校验，以及Base64编码解码、URL编码解码、正则表达式测试等开发工具，所有操作均在浏览器端完成，保障数据安全。">
+    <meta property="twitter:image" content="https://qqe2.com/images/logo.png">
+    
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <h1 class="text-xl font-bold text-blue-600">奇Q工具网</h1>
+            </div>
+            <nav class="hidden md:block">
+                <ul class="flex space-x-6">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600">JSON工具</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600">编码解码</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600">格式化工具</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600">开发工具</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600">文档教程</a></li>
+                </ul>
+            </nav>
+            <button class="md:hidden text-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-4">奇Q工具网 - 开发者的在线工具箱</h1>
+            <p class="text-xl mb-8">提供JSON编辑器、编码解码、格式化工具等一站式开发工具，所有操作均在浏览器端完成，保障您的数据安全</p>
+            <a href="#tools" class="bg-white text-blue-600 font-bold py-3 px-6 rounded-full hover:bg-gray-100 transition duration-300">开始使用</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        <!-- Featured Tool -->
+        <section class="mb-16">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-6 md:mb-0">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">JSON在线编辑器</h2>
+                        <p class="text-gray-600 mb-4">一款可视化的JSON编辑器，具有压缩、转义、校验等功能。当JSON格式出现问题时，采用中文的方式提醒JSON错误内容，以及标记JSON解析错误位置。</p>
+                        <a href="json/editor.html" class="inline-block bg-blue-600 text-white font-bold py-2 px-6 rounded hover:bg-blue-700 transition duration-300">立即使用</a>
+                    </div>
+                    <div class="md:w-1/2">
+                        <img src="https://placehold.co/500x300?text=JSON+Editor+Preview" alt="JSON编辑器预览" class="rounded-lg">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tools Categories -->
+        <section id="tools" class="mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">工具分类</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- JSON Tools -->
+                <div class="tool-card bg-white rounded-lg shadow-md p-6 transition duration-300 ease-in-out">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">JSON工具</h3>
+                    <ul class="space-y-2 mb-4">
+                        <li><a href="json/editor.html" class="text-blue-600 hover:underline">JSON在线编辑器</a></li>
+                        <li><a href="json/format.html" class="text-blue-600 hover:underline">JSON格式化</a></li>
+                        <li><a href="json/compress.html" class="text-blue-600 hover:underline">JSON压缩</a></li>
+                        <li><a href="json/validate.html" class="text-blue-600 hover:underline">JSON校验</a></li>
+                        <li><a href="json/escape.html" class="text-blue-600 hover:underline">JSON转义</a></li>
+                    </ul>
+                    <a href="json/" class="text-sm text-gray-500 hover:underline">查看全部 →</a>
+                </div>
+                
+                <!-- Encoding/Decoding Tools -->
+                <div class="tool-card bg-white rounded-lg shadow-md p-6 transition duration-300 ease-in-out">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">编码/解码工具</h3>
+                    <ul class="space-y-2 mb-4">
+                        <li><a href="encoder/base64.html" class="text-blue-600 hover:underline">Base64编码解码</a></li>
+                        <li><a href="encoder/url.html" class="text-blue-600 hover:underline">URL编码解码</a></li>
+                        <li><a href="encoder/md5.html" class="text-blue-600 hover:underline">MD5加密</a></li>
+                        <li><a href="encoder/sha.html" class="text-blue-600 hover:underline">SHA加密</a></li>
+                        <li><a href="encoder/escape.html" class="text-blue-600 hover:underline">Escape加密解密</a></li>
+                    </ul>
+                    <a href="encoder/" class="text-sm text-gray-500 hover:underline">查看全部 →</a>
+                </div>
+                
+                <!-- Formatting Tools -->
+                <div class="tool-card bg-white rounded-lg shadow-md p-6 transition duration-300 ease-in-out">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">格式化工具</h3>
+                    <ul class="space-y-2 mb-4">
+                        <li><a href="formatter/js.html" class="text-blue-600 hover:underline">JS美化</a></li>
+                        <li><a href="formatter/html.html" class="text-blue-600 hover:underline">HTML美化</a></li>
+                        <li><a href="formatter/css.html" class="text-blue-600 hover:underline">CSS美化</a></li>
+                        <li><a href="formatter/xml.html" class="text-blue-600 hover:underline">XML美化</a></li>
+                        <li><a href="formatter/sql.html" class="text-blue-600 hover:underline">SQL美化</a></li>
+                    </ul>
+                    <a href="formatter/" class="text-sm text-gray-500 hover:underline">查看全部 →</a>
+                </div>
+                
+                <!-- Development Tools -->
+                <div class="tool-card bg-white rounded-lg shadow-md p-6 transition duration-300 ease-in-out">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">开发工具</h3>
+                    <ul class="space-y-2 mb-4">
+                        <li><a href="dev/cron.html" class="text-blue-600 hover:underline">Cron表达式生成</a></li>
+                        <li><a href="dev/regex.html" class="text-blue-600 hover:underline">正则表达式测试</a></li>
+                        <li><a href="dev/websocket.html" class="text-blue-600 hover:underline">WebSocket模拟</a></li>
+                        <li><a href="dev/markdown.html" class="text-blue-600 hover:underline">Markdown编辑</a></li>
+                        <li><a href="dev/useragent.html" class="text-blue-600 hover:underline">User-Agent大全</a></li>
+                    </ul>
+                    <a href="dev/" class="text-sm text-gray-500 hover:underline">查看全部 →</a>
+                </div>
+                
+                <!-- Converter Tools -->
+                <div class="tool-card bg-white rounded-lg shadow-md p-6 transition duration-300 ease-in-out">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">转换工具</h3>
+                    <ul class="space-y-2 mb-4">
+                        <li><a href="converter/json-xml.html" class="text-blue-600 hover:underline">JSON-XML互转</a></li>
+                        <li><a href="converter/json-yaml.html" class="text-blue-600 hover:underline">JSON-YAML互转</a></li>
+                        <li><a href="converter/ip-decimal.html" class="text-blue-600 hover:underline">IP转数字</a></li>
+                        <li><a href="converter/csv-html.html" class="text-blue-600 hover:underline">CSV转HTML</a></li>
+                        <li><a href="converter/excel-json.html" class="text-blue-600 hover:underline">Excel转JSON</a></li>
+                    </ul>
+                    <a href="converter/" class="text-sm text-gray-500 hover:underline">查看全部 →</a>
+                </div>
+                
+                <!-- Document Tools -->
+                <div class="tool-card bg-white rounded-lg shadow-md p-6 transition duration-300 ease-in-out">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">文档教程</h3>
+                    <ul class="space-y-2 mb-4">
+                        <li><a href="docs/json.html" class="text-blue-600 hover:underline">JSON教程</a></li>
+                        <li><a href="docs/http-status.html" class="text-blue-600 hover:underline">HTTP状态码</a></li>
+                        <li><a href="docs/ascii.html" class="text-blue-600 hover:underline">Ascii码对照表</a></li>
+                        <li><a href="docs/user-agent.html" class="text-blue-600 hover:underline">User-Agent大全</a></li>
+                        <li><a href="docs/web-colors.html" class="text-blue-600 hover:underline">Web安全色</a></li>
+                    </ul>
+                    <a href="docs/" class="text-sm text-gray-500 hover:underline">查看全部 →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">为什么选择奇Q工具网？</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="text-blue-600 text-4xl mb-4">🔒</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">数据安全</h3>
+                    <p class="text-gray-600">所有操作均在浏览器端完成，不上传任何数据到服务器，确保您的数据安全。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="text-blue-600 text-4xl mb-4">⚡</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">快速高效</h3>
+                    <p class="text-gray-600">无需注册，打开即用，处理速度快，提升您的工作效率。</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="text-blue-600 text-4xl mb-4">📱</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">响应式设计</h3>
+                    <p class="text-gray-600">适配各种设备屏幕，在手机、平板、电脑上都能获得良好体验。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">奇Q工具网</h3>
+                    <p class="text-gray-400">提供JSON编辑器、编码解码、格式化工具等一站式开发工具，所有操作均在浏览器端完成，保障您的数据安全。</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">热门工具</h4>
+                    <ul class="space-y-2">
+                        <li><a href="json/editor.html" class="text-gray-400 hover:text-white">JSON在线编辑器</a></li>
+                        <li><a href="encoder/base64.html" class="text-gray-400 hover:text-white">Base64编码解码</a></li>
+                        <li><a href="dev/cron.html" class="text-gray-400 hover:text-white">Cron表达式生成</a></li>
+                        <li><a href="formatter/js.html" class="text-gray-400 hover:text-white">JS代码美化</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">工具分类</h4>
+                    <ul class="space-y-2">
+                        <li><a href="json/" class="text-gray-400 hover:text-white">JSON工具</a></li>
+                        <li><a href="encoder/" class="text-gray-400 hover:text-white">编码解码</a></li>
+                        <li><a href="formatter/" class="text-gray-400 hover:text-white">格式化工具</a></li>
+                        <li><a href="dev/" class="text-gray-400 hover:text-white">开发工具</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">关于我们</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">联系我们</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">使用条款</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">隐私政策</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 奇Q工具网. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
