@@ -197,23 +197,7 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ</textarea>
   </main>
 
   <!-- 页脚 -->
-  <footer class="bg-white mt-12">
-    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <div class="md:flex md:items-center md:justify-between">
-        <div class="flex justify-center md:justify-start">
-          <div class="flex-shrink-0 flex items-center">
-            <span class="text-xl font-bold text-indigo-600">🛠️</span>
-            <h2 class="ml-2 text-lg font-bold text-gray-900">在线工具箱</h2>
-          </div>
-        </div>
-        <div class="mt-8 md:mt-0 md:order-1">
-          <p class="text-center text-base text-gray-400">
-            &copy; 2023 在线工具箱. 所有工具均为纯前端实现，数据不会上传至服务器.
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <div id="footer-container"></div>
 
   <script>
     // 获取DOM元素
@@ -395,5 +379,12 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ</textarea>
       // 可以在这里添加初始化逻辑
     });
   </script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.body.classList.remove('loading');
+    });
+  </script>
+  <script src="../docs/footer-loader.js"></script>
 </body>
 </html>
