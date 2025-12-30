@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHA256 哈希计算工具 - 在线工具箱</title>
+  <meta name="description" content="在线 SHA256 哈希值计算工具，支持 UTF-8、UTF-16、Hex、Base64 等多种编码格式，同时支持 HMAC 计算。">
+  <link href="../css/tailwind.min.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔐</text></svg>">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2N5WRV2SNG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-2N5WRV2SNG');
+  </script>
+  <style>
+    .tool-container {
+      max-width: 1000px;
+    }
+    textarea {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .format-button {
+      transition: all 0.2s ease-in-out;
+    }
+    .format-button:hover {
+      transform: translateY(-2px);
+    }
+    /* 设置面板样式 */
+    .settings-panel {
+      background-color: #f7fafc;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .settings-group {
+      margin-bottom: 1rem;
+    }
+    .settings-label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #4a5568;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+  </style>
+  <!-- 引入crypto-js库 -->
+  <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
+</head>
+<body class="bg-gray-50">
+  <!-- 导航栏 -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../index.html" class="flex-shrink-0 flex items-center">
+            <span class="text-2xl font-bold text-indigo-600">🛠️</span>
+            <h1 class="ml-2 text-xl font-bold text-gray-900">在线工具箱</h1>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <a href="../index.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+            返回首页
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="tool-container mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">
+          SHA256 哈希计算工具
+        </h1>
+        <p class="text-lg text-gray-500">
+          This SHA256 online tool helps you calculate hashes from strings. You can input UTF-8, UTF-16, Hex, Base64, or other encodings. It also supports HMAC.
+        </p>
+      </div>
+
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+          <!-- 设置面板 -->
+          <div class="md:col-span-1">
+            <div class="settings-panel">
+              <h2 class="text-xl font-medium text-gray-900 mb-4">Settings</h2>
+              
+              <!-- Auto Update Switch -->
+              <div class="settings-group">
+                <label class="flex items-center space-x-2">
+                  <input type="checkbox" id="autoUpdate" class="form-checkbox h-5 w-5 text-indigo-600 focus:ring-indigo-500" checked>
+                  <span class="text-sm text-gray-700">Auto Update</span>
+                </label>
+              </div>
+
+              <!-- Remember Input Switch -->
+              <div class="settings-group">
+                <label class="flex items-center space-x-2">
+                  <input type="checkbox" id="rememberInput" class="form-checkbox h-5 w-5 text-indigo-600 focus:ring-indigo-500" checked>
+                  <span class="text-sm text-gray-700">Remember Input</span>
+                </label>
+              </div>
+
+              <!-- Input Encoding Dropdown -->
+              <div class="settings-group">
+                <label for="inputEncoding" class="block text-sm font-medium text-gray-700 mb-2">Input Encoding</label>
+                <select id="inputEncoding" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                  <option value="UTF-8">UTF-8</option>
+                  <option value="UTF-16">UTF-16</option>
+                  <option value="hex">Hex</option>
+                  <option value="base64">Base64</option>
+                </select>
+              </div>
+
+              <!-- Output Encoding Dropdown -->
+              <div class="settings-group">
+                <label for="outputEncoding" class="block text-sm font-medium text-gray-700 mb-2">Output Encoding</label>
+                <select id="outputEncoding" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                  <option value="hex-lowercase">Hex (Lower Case)</option>
+                  <option value="hex-uppercase">Hex (Upper Case)</option>
+                  <option value="base64">Base64</option>
+                </select>
+              </div>
+
+              <!-- Enable HMAC Switch -->
+              <div class="settings-group">
+                <label class="flex items-center space-x-2">
+                  <input type="checkbox" id="enableHMAC" class="form-checkbox h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                  <span class="text-sm text-gray-700">Enable HMAC</span>
+                </label>
+              </div>
+
+              <!-- HMAC Settings -->
+              <div id="hmacSettings" class="mt-4 p-4 bg-gray-100 rounded-md hidden">
+                <h3 class="text-base font-medium text-gray-900 mb-2">HMAC</h3>
+                <div class="settings-group">
+                  <label for="hmacEncoding" class="block text-sm font-medium text-gray-700 mb-2">Encoding</label>
+                  <select id="hmacEncoding" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="UTF-8">UTF-8</option>
+                    <option value="UTF-16">UTF-16</option>
+                  </select>
+                </div>
+                <div class="settings-group">
+                  <label for="hmacKey" class="block text-sm font-medium text-gray-700 mb-2">Key</label>
+                  <input type="text" id="hmacKey" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="请输入HMAC密钥">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 输入区域 -->
+          <div class="md:col-span-1">
+            <div class="flex justify-between items-center mb-2">
+              <label for="inputText" class="block text-sm font-medium text-gray-700">Input</label>
+              <button id="clearInput" class="text-sm text-gray-500 hover:text-gray-700">清空</button>
+            </div>
+            <textarea 
+              id="inputText" 
+              rows="10" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="请输入需要计算SHA256的文本..."></textarea>
+          </div>
+
+          <!-- 输出区域 -->
+          <div class="md:col-span-1">
+            <div class="flex justify-between items-center mb-2">
+              <label for="outputText" class="block text-sm font-medium text-gray-700">Output</label>
+              <button id="copyOutput" class="text-sm text-gray-500 hover:text-gray-700">复制</button>
+            </div>
+            <textarea 
+              id="outputText" 
+              rows="10" 
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="SHA256计算结果将显示在这里..." readonly></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- JavaScript -->
+  <script>
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 获取所有元素
+      const inputText = document.getElementById('inputText');
+      const outputText = document.getElementById('outputText');
+      const autoUpdate = document.getElementById('autoUpdate');
+      const rememberInput = document.getElementById('rememberInput');
+      const enableHMAC = document.getElementById('enableHMAC');
+      const hmacSettings = document.getElementById('hmacSettings');
+      const clearInput = document.getElementById('clearInput');
+      const copyOutput = document.getElementById('copyOutput');
+      
+      // 编码选择器
+      const inputEncoding = document.getElementById('inputEncoding');
+      const outputEncoding = document.getElementById('outputEncoding');
+      const hmacEncoding = document.getElementById('hmacEncoding');
+      const hmacKey = document.getElementById('hmacKey');
+
+      // 切换HMAC设置显示
+      enableHMAC.addEventListener('change', function() {
+        if (this.checked) {
+          hmacSettings.classList.remove('hidden');
+        } else {
+          hmacSettings.classList.add('hidden');
+        }
+      });
+
+      // 清空输入
+      clearInput.addEventListener('click', function() {
+        inputText.value = '';
+        outputText.value = '';
+      });
+
+      // 复制输出
+      copyOutput.addEventListener('click', function() {
+        navigator.clipboard.writeText(outputText.value).then(() => {
+          // 可以添加复制成功的提示
+          alert('已复制到剪贴板！');
+        }).catch(err => {
+          console.error('复制失败:', err);
+          alert('复制失败！');
+        });
+      });
+
+      // 实时更新
+      inputText.addEventListener('input', function() {
+        if (autoUpdate.checked) {
+          calculateHash();
+        }
+      });
+
+      // 手动计算按钮（如果需要）
+      // 添加一个计算按钮
+      const calculateBtn = document.createElement('button');
+      calculateBtn.id = 'calculateBtn';
+      calculateBtn.textContent = '计算';
+      calculateBtn.className = 'mt-2 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500';
+      calculateBtn.addEventListener('click', calculateHash);
+      
+      // 将计算按钮添加到页面中
+      const inputContainer = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-3.gap-6.p-6');
+      const inputDiv = inputContainer.querySelector('.md\\:col-span-1:nth-child(2)');
+      inputDiv.appendChild(calculateBtn);
+
+      // 计算哈希值
+      function calculateHash() {
+        try {
+          let input = inputText.value;
+          let encoding = inputEncoding.value;
+          let outputFormat = outputEncoding.value;
+          
+          // 根据输入编码处理输入
+          let processedInput = input;
+          if (encoding === 'hex') {
+            processedInput = hexToBytes(input);
+          } else if (encoding === 'base64') {
+            processedInput = atob(input);
+          }
+          
+          // 如果启用HMAC
+          if (enableHMAC.checked && hmacKey.value.trim() !== '') {
+            const key = hmacKey.value;
+            let keyBytes;
+            if (hmacEncoding.value === 'UTF-8') {
+              keyBytes = CryptoJS.enc.Utf8.parse(key);
+            } else if (hmacEncoding.value === 'UTF-16') {
+              keyBytes = CryptoJS.enc.Utf16.parse(key);
+            }
+            
+            // 使用HMAC进行计算
+            let hash = CryptoJS.HmacSHA256(processedInput, keyBytes);
+            
+            // 根据输出格式转换结果
+            if (outputFormat === 'hex-lowercase') {
+              outputText.value = hash.toString().toLowerCase();
+            } else if (outputFormat === 'hex-uppercase') {
+              outputText.value = hash.toString().toUpperCase();
+            } else if (outputFormat === 'base64') {
+              outputText.value = hash.toString(CryptoJS.enc.Base64);
+            }
+          } else {
+            // 普通SHA256计算
+            let hash = CryptoJS.SHA256(processedInput);
+            
+            // 根据输出格式转换结果
+            if (outputFormat === 'hex-lowercase') {
+              outputText.value = hash.toString().toLowerCase();
+            } else if (outputFormat === 'hex-uppercase') {
+              outputText.value = hash.toString().toUpperCase();
+            } else if (outputFormat === 'base64') {
+              outputText.value = hash.toString(CryptoJS.enc.Base64);
+            }
+          }
+        } catch (error) {
+          console.error('计算哈希时出错:', error);
+          outputText.value = '计算错误：' + error.message;
+        }
+      }
+
+      // 辅助函数：十六进制字符串转字节数组
+      function hexToBytes(hex) {
+        for (var bytes = [], c = 0; c < hex.length; c += 2)
+          bytes.push(parseInt(hex.substr(c, 2), 16));
+        return CryptoJS.enc.Utf8.parse(bytes.join(''));
+      }
+
+      // 初始化：检查是否记住上次输入
+      if (rememberInput.checked && localStorage.getItem('sha256-input')) {
+        inputText.value = localStorage.getItem('sha256-input');
+        calculateHash();
+      }
+
+      // 监听输入变化，保存到localStorage
+      inputText.addEventListener('input', function() {
+        if (rememberInput.checked) {
+          localStorage.setItem('sha256-input', this.value);
+        }
+      });
+
+      // 页面卸载时保存状态
+      window.addEventListener('beforeunload', function() {
+        if (rememberInput.checked) {
+          localStorage.setItem('sha256-input', inputText.value);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
