@@ -355,6 +355,27 @@
       // 初始化：检查是否记住上次输入
       if (rememberInput.checked && localStorage.getItem('sha256-input')) {
         inputText.value = localStorage.getItem('sha256-input');
+        // 恢复HMAC设置
+        if (localStorage.getItem('sha256-enableHMAC') === 'true') {
+          enableHMAC.checked = true;
+          hmacSettings.classList.remove('hidden');
+        } else {
+          enableHMAC.checked = false;
+          hmacSettings.classList.add('hidden');
+        }
+        // 恢复其他设置
+        const savedInputEncoding = localStorage.getItem('sha256-inputEncoding');
+        if (savedInputEncoding) inputEncoding.value = savedInputEncoding;
+        
+        const savedOutputEncoding = localStorage.getItem('sha256-outputEncoding');
+        if (savedOutputEncoding) outputEncoding.value = savedOutputEncoding;
+        
+        const savedHmacEncoding = localStorage.getItem('sha256-hmacEncoding');
+        if (savedHmacEncoding) hmacEncoding.value = savedHmacEncoding;
+        
+        const savedHmacKey = localStorage.getItem('sha256-hmacKey');
+        if (savedHmacKey) hmacKey.value = savedHmacKey;
+        
         calculateHash();
       }
 
@@ -364,11 +385,52 @@
           localStorage.setItem('sha256-input', this.value);
         }
       });
+      
+      // 监听其他设置变化，保存到localStorage
+      enableHMAC.addEventListener('change', function() {
+        if (rememberInput.checked) {
+          localStorage.setItem('sha256-enableHMAC', this.checked);
+        }
+        if (this.checked) {
+          hmacSettings.classList.remove('hidden');
+        } else {
+          hmacSettings.classList.add('hidden');
+        }
+      });
+      
+      inputEncoding.addEventListener('change', function() {
+        if (rememberInput.checked) {
+          localStorage.setItem('sha256-inputEncoding', this.value);
+        }
+      });
+      
+      outputEncoding.addEventListener('change', function() {
+        if (rememberInput.checked) {
+          localStorage.setItem('sha256-outputEncoding', this.value);
+        }
+      });
+      
+      hmacEncoding.addEventListener('change', function() {
+        if (rememberInput.checked) {
+          localStorage.setItem('sha256-hmacEncoding', this.value);
+        }
+      });
+      
+      hmacKey.addEventListener('input', function() {
+        if (rememberInput.checked) {
+          localStorage.setItem('sha256-hmacKey', this.value);
+        }
+      });
 
       // 页面卸载时保存状态
       window.addEventListener('beforeunload', function() {
         if (rememberInput.checked) {
           localStorage.setItem('sha256-input', inputText.value);
+          localStorage.setItem('sha256-enableHMAC', enableHMAC.checked);
+          localStorage.setItem('sha256-inputEncoding', inputEncoding.value);
+          localStorage.setItem('sha256-outputEncoding', outputEncoding.value);
+          localStorage.setItem('sha256-hmacEncoding', hmacEncoding.value);
+          localStorage.setItem('sha256-hmacKey', hmacKey.value);
         }
       });
     });
