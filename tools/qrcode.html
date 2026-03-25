@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>二维码生成器 - 在线工具箱</title>
+  <meta name="description" content="在线二维码生成器，支持文本、网址、邮箱、电话、短信、WiFi、vCard 名片、地理位置、日程事件等多种格式。">
+  <link href="../css/tailwind.min.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2N5WRV2SNG"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2N5WRV2SNG');
+  </script>
+  <style>
+    .tool-container { max-width: 1200px; }
+    .field-group { display: none; }
+    .field-group.active { display: block; }
+    .qr-preview { min-height: 320px; background: #f8fafc; }
+    .qr-preview svg { max-width: 100%; height: auto; display: block; }
+    textarea { font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; font-size: 14px; line-height: 1.5; }
+    .success-message { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .error-message { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .chip-btn.active { background-color: #111827; color: #ffffff; border-color: #111827; }
+    .type-tab.active { background-color: #4f46e5; color: #ffffff; border-color: #4f46e5; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="../index.html" class="flex-shrink-0 flex items-center">
+            <span class="text-2xl font-bold text-indigo-600">🛠️</span>
+            <h1 class="ml-2 text-xl font-bold text-gray-900">在线工具箱</h1>
+          </a>
+        </div>
+        <div class="flex items-center">
+          <a href="../index.html" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">返回首页</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="tool-container mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-4">二维码生成器</h1>
+        <p class="text-lg text-gray-500">支持多种标准二维码格式，适合分享链接、联系人、WiFi、短信、定位和日程信息。</p>
+      </div>
+      <div id="appRoot"></div>
+    </div>
+  </main>
+
+  <div id="footer-container"></div>
+  <script>
+    const appRoot = document.getElementById('appRoot');
+    appRoot.innerHTML = `
+      <div class="grid grid-cols-1 xl:grid-cols-5 gap-6">
+        <section class="xl:col-span-3 bg-white shadow rounded-lg overflow-hidden">
+          <div class="p-6 border-b border-gray-200">
+            <div class="flex flex-col gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">内容类型</label>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700 active" data-type="text">纯文本</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="url">网址 URL</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="email">邮箱</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="phone">电话</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="sms">短信</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="wifi">WiFi</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="wechat">微信</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="feishu">飞书</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="vcard">vCard 名片</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="mecard">MeCard 名片</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="geo">地理位置</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="event">日程事件</button>
+                  <button type="button" class="type-tab px-3 py-2 text-sm whitespace-nowrap rounded-full border border-gray-300 text-gray-700" data-type="whatsapp">WhatsApp</button>
+                </div>
+                <input id="qrType" type="hidden" value="text">
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button class="chip-btn px-3 py-1.5 text-sm rounded-full border border-gray-300 text-gray-700 active" data-example="website">示例：网站</button>
+                <button class="chip-btn px-3 py-1.5 text-sm rounded-full border border-gray-300 text-gray-700" data-example="wifi">示例：WiFi</button>
+                <button class="chip-btn px-3 py-1.5 text-sm rounded-full border border-gray-300 text-gray-700" data-example="contact">示例：联系人</button>
+                <button class="chip-btn px-3 py-1.5 text-sm rounded-full border border-gray-300 text-gray-700" data-example="event">示例：日程</button>
+                <button class="chip-btn px-3 py-1.5 text-sm rounded-full border border-gray-300 text-gray-700" data-example="location">示例：定位</button>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 space-y-6">
+            <div id="group-text" class="field-group active"><label for="textContent" class="block text-sm font-medium text-gray-700 mb-1">文本内容</label><textarea id="textContent" rows="6" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="输入任意文本、中文、JSON、命令或分享说明"></textarea></div>
+            <div id="group-url" class="field-group"><label for="urlValue" class="block text-sm font-medium text-gray-700 mb-1">网址</label><input id="urlValue" type="url" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="https://example.com"></div>
+            <div id="group-email" class="field-group grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2"><label for="emailTo" class="block text-sm font-medium text-gray-700 mb-1">收件人</label><input id="emailTo" type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="name@example.com"></div>
+              <div class="md:col-span-2"><label for="emailSubject" class="block text-sm font-medium text-gray-700 mb-1">主题</label><input id="emailSubject" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="邮件主题"></div>
+              <div class="md:col-span-2"><label for="emailBody" class="block text-sm font-medium text-gray-700 mb-1">正文</label><textarea id="emailBody" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="邮件正文"></textarea></div>
+            </div>
+            <div id="group-phone" class="field-group"><label for="phoneValue" class="block text-sm font-medium text-gray-700 mb-1">电话号码</label><input id="phoneValue" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="+8613812345678"></div>
+            <div id="group-sms" class="field-group grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><label for="smsNumber" class="block text-sm font-medium text-gray-700 mb-1">收信号码</label><input id="smsNumber" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="+8613812345678"></div>
+              <div class="md:col-span-2"><label for="smsBody" class="block text-sm font-medium text-gray-700 mb-1">短信内容</label><textarea id="smsBody" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="输入短信内容"></textarea></div>
+            </div>
+            <div id="group-wifi" class="field-group grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><label for="wifiSsid" class="block text-sm font-medium text-gray-700 mb-1">WiFi 名称 SSID</label><input id="wifiSsid" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="MyWiFi"></div>
+              <div><label for="wifiPassword" class="block text-sm font-medium text-gray-700 mb-1">密码</label><input id="wifiPassword" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="12345678"></div>
+              <div><label for="wifiEncryption" class="block text-sm font-medium text-gray-700 mb-1">加密方式</label><select id="wifiEncryption" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">无密码</option></select></div>
+              <div class="flex items-end"><label class="inline-flex items-center"><input id="wifiHidden" type="checkbox" class="rounded border-gray-300 text-indigo-600"><span class="ml-2 text-sm text-gray-700">隐藏网络</span></label></div>
+            </div>
+            <div id="group-wechat" class="field-group grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><label for="wechatId" class="block text-sm font-medium text-gray-700 mb-1">微信号</label><input id="wechatId" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="wechat_id"></div>
+              <div><label for="wechatName" class="block text-sm font-medium text-gray-700 mb-1">昵称</label><input id="wechatName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="张三"></div>
+              <div class="md:col-span-2"><label for="wechatLink" class="block text-sm font-medium text-gray-700 mb-1">加好友链接（可选）</label><input id="wechatLink" type="url" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="https://u.wechat.com/..."></div>
+              <div class="md:col-span-2"><label for="wechatNote" class="block text-sm font-medium text-gray-700 mb-1">备注说明</label><textarea id="wechatNote" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="扫码添加微信，备注来源。"></textarea></div>
+            </div>
+            <div id="group-feishu" class="field-group grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><label for="feishuTitle" class="block text-sm font-medium text-gray-700 mb-1">标题</label><input id="feishuTitle" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="飞书群 / 个人主页 / 文档"></div>
+              <div><label for="feishuId" class="block text-sm font-medium text-gray-700 mb-1">飞书 ID（可选）</label><input id="feishuId" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="ou_xxx / cli_xxx"></div>
+              <div class="md:col-span-2"><label for="feishuLink" class="block text-sm font-medium text-gray-700 mb-1">飞书链接</label><input id="feishuLink" type="url" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="https://applink.feishu.cn/..."></div>
+              <div class="md:col-span-2"><label for="feishuNote" class="block text-sm font-medium text-gray-700 mb-1">说明</label><textarea id="feishuNote" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="扫码加入飞书群或打开飞书文档。"></textarea></div>
+            </div>
+            <div id="group-vcard" class="field-group grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><label for="vcardName" class="block text-sm font-medium text-gray-700 mb-1">姓名</label><input id="vcardName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="张三"></div>
+              <div><label for="vcardOrg" class="block text-sm font-medium text-gray-700 mb-1">公司</label><input id="vcardOrg" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="示例科技"></div>
+              <div><label for="vcardTitle" class="block text-sm font-medium text-gray-700 mb-1">职位</label><input id="vcardTitle" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="产品经理"></div>
+              <div><label for="vcardPhone" class="block text-sm font-medium text-gray-700 mb-1">电话</label><input id="vcardPhone" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="+8613812345678"></div>
+              <div><label for="vcardEmail" class="block text-sm font-medium text-gray-700 mb-1">邮箱</label><input id="vcardEmail" type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="name@example.com"></div>
+              <div><label for="vcardWebsite" class="block text-sm font-medium text-gray-700 mb-1">网站</label><input id="vcardWebsite" type="url" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="https://example.com"></div>
+              <div class="md:col-span-2"><label for="vcardAddress" class="block text-sm font-medium text-gray-700 mb-1">地址</label><input id="vcardAddress" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="北京市朝阳区示例路 88 号"></div>
+              <div class="md:col-span-2"><label for="vcardNote" class="block text-sm font-medium text-gray-700 mb-1">备注</label><textarea id="vcardNote" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="联系人说明"></textarea></div>
+            </div>
+            <div id="group-mecard" class="field-group grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><label for="mecardName" class="block text-sm font-medium text-gray-700 mb-1">姓名</label><input id="mecardName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="张三"></div>
+              <div><label for="mecardPhone" class="block text-sm font-medium text-gray-700 mb-1">电话</label><input id="mecardPhone" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="+8613812345678"></div>
+              <div><label for="mecardEmail" class="block text-sm font-medium text-gray-700 mb-1">邮箱</label><input id="mecardEmail" type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="name@example.com"></div>
+              <div><label for="mecardAddress" class="block text-sm font-medium text-gray-700 mb-1">地址</label><input id="mecardAddress" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="上海市浦东新区示例路"></div>
+              <div class="md:col-span-2"><label for="mecardNote" class="block text-sm font-medium text-gray-700 mb-1">备注</label><textarea id="mecardNote" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="备注信息"></textarea></div>
+            </div>
+            <div id="group-geo" class="field-group grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><label for="geoLat" class="block text-sm font-medium text-gray-700 mb-1">纬度</label><input id="geoLat" type="number" step="any" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="39.9042"></div>
+              <div><label for="geoLng" class="block text-sm font-medium text-gray-700 mb-1">经度</label><input id="geoLng" type="number" step="any" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="116.4074"></div>
+              <div class="md:col-span-2"><label for="geoQuery" class="block text-sm font-medium text-gray-700 mb-1">附加说明（可选）</label><input id="geoQuery" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="北京天安门"></div>
+            </div>
+            <div id="group-event" class="field-group grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2"><label for="eventTitle" class="block text-sm font-medium text-gray-700 mb-1">事件标题</label><input id="eventTitle" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="产品评审会议"></div>
+              <div><label for="eventStart" class="block text-sm font-medium text-gray-700 mb-1">开始时间</label><input id="eventStart" type="datetime-local" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"></div>
+              <div><label for="eventEnd" class="block text-sm font-medium text-gray-700 mb-1">结束时间</label><input id="eventEnd" type="datetime-local" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"></div>
+              <div class="md:col-span-2"><label for="eventLocation" class="block text-sm font-medium text-gray-700 mb-1">地点</label><input id="eventLocation" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="会议室 A / 腾讯会议"></div>
+              <div class="md:col-span-2"><label for="eventDescription" class="block text-sm font-medium text-gray-700 mb-1">说明</label><textarea id="eventDescription" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="议程、备注、参会链接"></textarea></div>
+            </div>
+            <div id="group-whatsapp" class="field-group grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><label for="whatsappNumber" class="block text-sm font-medium text-gray-700 mb-1">号码</label><input id="whatsappNumber" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="8613812345678"></div>
+              <div class="md:col-span-2"><label for="whatsappText" class="block text-sm font-medium text-gray-700 mb-1">消息内容</label><textarea id="whatsappText" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="你好，我想进一步了解产品信息。"></textarea></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div><label for="errorLevel" class="block text-sm font-medium text-gray-700 mb-1">容错级别</label><select id="errorLevel" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"><option value="L">L 约 7%</option><option value="M" selected>M 约 15%</option><option value="Q">Q 约 25%</option><option value="H">H 约 30%</option></select></div>
+              <div><label for="qrSize" class="block text-sm font-medium text-gray-700 mb-1">图片尺寸</label><input id="qrSize" type="number" min="160" max="1200" step="10" value="320" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"></div>
+              <div><label for="qrMargin" class="block text-sm font-medium text-gray-700 mb-1">边距</label><input id="qrMargin" type="number" min="0" max="8" step="1" value="2" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"></div>
+              <div><label for="darkColor" class="block text-sm font-medium text-gray-700 mb-1">前景色</label><input id="darkColor" type="color" value="#111827" class="w-full h-10 px-1 py-1 border border-gray-300 rounded-md shadow-sm"></div>
+              <div><label for="lightColor" class="block text-sm font-medium text-gray-700 mb-1">背景色</label><input id="lightColor" type="color" value="#ffffff" class="w-full h-10 px-1 py-1 border border-gray-300 rounded-md shadow-sm"></div>
+            </div>
+            <div><div class="flex justify-between items-center mb-1"><label for="payloadOutput" class="block text-sm font-medium text-gray-700">最终编码内容</label><button id="copyPayloadBtn" class="text-sm text-indigo-600 hover:text-indigo-800">复制内容</button></div><textarea id="payloadOutput" rows="6" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50"></textarea></div>
+            <div class="flex flex-wrap gap-3">
+              <button id="generateBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">生成二维码</button>
+              <button id="downloadPngBtn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">下载 PNG</button>
+              <button id="downloadSvgBtn" class="px-4 py-2 bg-slate-700 text-white rounded-md hover:bg-slate-800">下载 SVG</button>
+              <button id="clearBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">清空</button>
+            </div>
+            <div id="messageArea" class="hidden p-3 rounded-md text-sm"></div>
+          </div>
+        </section>
+        <aside class="xl:col-span-2 space-y-6">
+          <section class="bg-white shadow rounded-lg overflow-hidden"><div class="p-6 border-b border-gray-200"><h2 class="text-lg font-medium text-gray-900">预览</h2></div><div class="p-6"><div id="qrPreview" class="qr-preview border border-dashed border-gray-300 rounded-lg flex items-center justify-center p-4"><p class="text-gray-400 text-sm text-center">填写内容后生成二维码</p></div></div></section>
+          <section class="bg-white shadow rounded-lg overflow-hidden"><div class="p-6"><h2 class="text-lg font-medium text-gray-900 mb-3">支持格式</h2><ul class="list-disc pl-5 space-y-1 text-sm text-gray-600"><li>纯文本、URL、邮箱、电话</li><li>短信、WhatsApp、WiFi、微信、飞书</li><li>vCard / MeCard 联系人名片</li><li>Geo 定位、日程事件</li><li>Unicode 中文与多行内容</li></ul></div></section>
+        </aside>
+      </div>
+    `;
+  </script>
+  <script>
+    const qrType = document.getElementById('qrType');
+    const typeTabs = document.querySelectorAll('.type-tab');
+    const payloadOutput = document.getElementById('payloadOutput');
+    const qrPreview = document.getElementById('qrPreview');
+    const messageArea = document.getElementById('messageArea');
+    const chipButtons = document.querySelectorAll('.chip-btn');
+    const inputIds = ['textContent','urlValue','emailTo','emailSubject','emailBody','phoneValue','smsNumber','smsBody','wifiSsid','wifiPassword','wifiEncryption','wifiHidden','wechatId','wechatName','wechatLink','wechatNote','feishuTitle','feishuId','feishuLink','feishuNote','vcardName','vcardOrg','vcardTitle','vcardPhone','vcardEmail','vcardWebsite','vcardAddress','vcardNote','mecardName','mecardPhone','mecardEmail','mecardAddress','mecardNote','geoLat','geoLng','geoQuery','eventTitle','eventStart','eventEnd','eventLocation','eventDescription','whatsappNumber','whatsappText','errorLevel','qrSize','qrMargin','darkColor','lightColor'];
+    let currentSvgMarkup = '';
+
+    function escapeQrValue(value) {
+      return String(value || '').replace(/([\\;,:"])/g, '\\$1');
+    }
+
+    function formatDateToIcs(value) {
+      if (!value) return '';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '';
+      return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+    }
+
+    function setActiveGroup(type) {
+      document.querySelectorAll('.field-group').forEach(group => group.classList.remove('active'));
+      const target = document.getElementById('group-' + type);
+      if (target) target.classList.add('active');
+    }
+
+    function setQrType(type) {
+      qrType.value = type;
+      typeTabs.forEach(tab => tab.classList.toggle('active', tab.dataset.type === type));
+      setActiveGroup(type);
+      updatePayload();
+    }
+
+    function buildPayload() {
+      switch (qrType.value) {
+        case 'text':
+          return document.getElementById('textContent').value.trim();
+        case 'url':
+          return document.getElementById('urlValue').value.trim();
+        case 'email': {
+          const to = document.getElementById('emailTo').value.trim();
+          const params = [];
+          const subject = document.getElementById('emailSubject').value.trim();
+          const body = document.getElementById('emailBody').value.trim();
+          if (!to) return '';
+          if (subject) params.push('subject=' + encodeURIComponent(subject));
+          if (body) params.push('body=' + encodeURIComponent(body));
+          return 'mailto:' + to + (params.length ? '?' + params.join('&') : '');
+        }
+        case 'phone': {
+          const phone = document.getElementById('phoneValue').value.trim();
+          return phone ? 'tel:' + phone : '';
+        }
+        case 'sms': {
+          const number = document.getElementById('smsNumber').value.trim();
+          const body = document.getElementById('smsBody').value.trim();
+          if (!number) return '';
+          return body ? 'SMSTO:' + number + ':' + body : 'SMSTO:' + number;
+        }
+        case 'wifi': {
+          const ssid = escapeQrValue(document.getElementById('wifiSsid').value.trim());
+          const password = escapeQrValue(document.getElementById('wifiPassword').value.trim());
+          const encryption = document.getElementById('wifiEncryption').value;
+          const hidden = document.getElementById('wifiHidden').checked ? 'true' : 'false';
+          return ssid ? 'WIFI:T:' + encryption + ';S:' + ssid + ';P:' + password + ';H:' + hidden + ';;' : '';
+        }
+        case 'wechat': {
+          const link = document.getElementById('wechatLink').value.trim();
+          const wechatId = document.getElementById('wechatId').value.trim();
+          const name = document.getElementById('wechatName').value.trim();
+          const note = document.getElementById('wechatNote').value.trim();
+          if (link) return link;
+          const lines = [
+            name ? '微信昵称: ' + name : '',
+            wechatId ? '微信号: ' + wechatId : '',
+            note ? '说明: ' + note : ''
+          ].filter(Boolean);
+          return lines.join('\n');
+        }
+        case 'feishu': {
+          const link = document.getElementById('feishuLink').value.trim();
+          const title = document.getElementById('feishuTitle').value.trim();
+          const id = document.getElementById('feishuId').value.trim();
+          const note = document.getElementById('feishuNote').value.trim();
+          if (link) return link;
+          const lines = [
+            title ? '飞书标题: ' + title : '',
+            id ? '飞书 ID: ' + id : '',
+            note ? '说明: ' + note : ''
+          ].filter(Boolean);
+          return lines.join('\n');
+        }
+        case 'vcard': {
+          const lines = [
+            'BEGIN:VCARD',
+            'VERSION:3.0',
+            'FN:' + document.getElementById('vcardName').value.trim(),
+            'ORG:' + document.getElementById('vcardOrg').value.trim(),
+            'TITLE:' + document.getElementById('vcardTitle').value.trim(),
+            'TEL:' + document.getElementById('vcardPhone').value.trim(),
+            'EMAIL:' + document.getElementById('vcardEmail').value.trim(),
+            'URL:' + document.getElementById('vcardWebsite').value.trim(),
+            'ADR:;;' + document.getElementById('vcardAddress').value.trim(),
+            'NOTE:' + document.getElementById('vcardNote').value.trim(),
+            'END:VCARD'
+          ];
+          return lines.filter(line => ['BEGIN:VCARD','VERSION:3.0','END:VCARD'].includes(line) || !line.endsWith(':')).join('\n');
+        }
+        case 'mecard': {
+          const parts = [
+            'N:' + escapeQrValue(document.getElementById('mecardName').value.trim()),
+            'TEL:' + escapeQrValue(document.getElementById('mecardPhone').value.trim()),
+            'EMAIL:' + escapeQrValue(document.getElementById('mecardEmail').value.trim()),
+            'ADR:' + escapeQrValue(document.getElementById('mecardAddress').value.trim()),
+            'NOTE:' + escapeQrValue(document.getElementById('mecardNote').value.trim())
+          ].filter(item => !item.endsWith(':'));
+          return parts.length ? 'MECARD:' + parts.join(';') + ';;' : '';
+        }
+        case 'geo': {
+          const lat = document.getElementById('geoLat').value.trim();
+          const lng = document.getElementById('geoLng').value.trim();
+          const query = document.getElementById('geoQuery').value.trim();
+          if (!lat || !lng) return '';
+          return query ? 'geo:' + lat + ',' + lng + '?q=' + encodeURIComponent(query) : 'geo:' + lat + ',' + lng;
+        }
+        case 'event': {
+          const title = document.getElementById('eventTitle').value.trim();
+          const start = formatDateToIcs(document.getElementById('eventStart').value);
+          const end = formatDateToIcs(document.getElementById('eventEnd').value);
+          if (!title || !start || !end) return '';
+          return [
+            'BEGIN:VEVENT',
+            'SUMMARY:' + title,
+            'DTSTART:' + start,
+            'DTEND:' + end,
+            'LOCATION:' + document.getElementById('eventLocation').value.trim(),
+            'DESCRIPTION:' + document.getElementById('eventDescription').value.trim(),
+            'END:VEVENT'
+          ].join('\n');
+        }
+        case 'whatsapp': {
+          const number = document.getElementById('whatsappNumber').value.trim().replace(/[^\d]/g, '');
+          const text = document.getElementById('whatsappText').value.trim();
+          if (!number && !text) return '';
+          return 'https://wa.me/' + number + (text ? '?text=' + encodeURIComponent(text) : '');
+        }
+        default:
+          return '';
+      }
+    }
+
+    function showMessage(message, type) {
+      messageArea.textContent = message;
+      messageArea.className = 'p-3 rounded-md text-sm ' + (type === 'error' ? 'error-message' : 'success-message');
+      messageArea.classList.remove('hidden');
+    }
+
+    function updatePayload() {
+      payloadOutput.value = buildPayload();
+    }
+
+    function generateQrCode() {
+      updatePayload();
+      const payload = payloadOutput.value.trim();
+      if (!payload) {
+        currentSvgMarkup = '';
+        qrPreview.innerHTML = '<p class="text-gray-400 text-sm text-center">请先填写有效内容</p>';
+        showMessage('请先填写有效内容。', 'error');
+        return;
+      }
+      try {
+        const errorLevel = document.getElementById('errorLevel').value;
+        const size = Number(document.getElementById('qrSize').value) || 320;
+        const margin = Number(document.getElementById('qrMargin').value) || 2;
+        const darkColor = document.getElementById('darkColor').value;
+        const lightColor = document.getElementById('lightColor').value;
+        const qr = qrcode(0, errorLevel);
+        qr.addData(payload, 'Byte');
+        qr.make();
+        currentSvgMarkup = qr.createSvgTag({
+          cellSize: Math.max(1, Math.floor(size / qr.getModuleCount())),
+          margin: margin,
+          scalable: true
+        });
+
+        const svgDoc = new DOMParser().parseFromString(currentSvgMarkup, 'image/svg+xml');
+        const svg = svgDoc.documentElement;
+        svg.setAttribute('width', String(size));
+        svg.setAttribute('height', String(size));
+        const rect = svg.querySelector('rect');
+        if (rect) rect.setAttribute('fill', lightColor);
+        svg.querySelectorAll('path').forEach(path => {
+          const fill = path.getAttribute('fill');
+          path.setAttribute('fill', fill === '#ffffff' ? lightColor : darkColor);
+        });
+        currentSvgMarkup = new XMLSerializer().serializeToString(svg);
+        qrPreview.innerHTML = currentSvgMarkup;
+        showMessage('二维码已生成。', 'success');
+      } catch (error) {
+        console.error(error);
+        currentSvgMarkup = '';
+        qrPreview.innerHTML = '<p class="text-red-500 text-sm text-center">二维码生成失败，请检查内容长度或格式。</p>';
+        showMessage('二维码生成失败，请检查内容长度或格式。', 'error');
+      }
+    }
+
+    function downloadFile(content, filename, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadPng() {
+      if (!currentSvgMarkup) {
+        generateQrCode();
+        if (!currentSvgMarkup) return;
+      }
+      const size = Number(document.getElementById('qrSize').value) || 320;
+      const svgUrl = URL.createObjectURL(new Blob([currentSvgMarkup], { type: 'image/svg+xml;charset=utf-8' }));
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, size, size);
+        URL.revokeObjectURL(svgUrl);
+        canvas.toBlob(blob => {
+          if (!blob) {
+            showMessage('PNG 导出失败。', 'error');
+            return;
+          }
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'qrcode.png';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          URL.revokeObjectURL(url);
+          showMessage('PNG 已下载。', 'success');
+        }, 'image/png');
+      };
+      img.onerror = function() {
+        URL.revokeObjectURL(svgUrl);
+        showMessage('PNG 导出失败。', 'error');
+      };
+      img.src = svgUrl;
+    }
+
+    function fillExample(example) {
+      chipButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.example === example));
+      if (example === 'website') {
+        qrType.value = 'url';
+        document.getElementById('urlValue').value = 'https://taugin.github.io/tools/qrcode.html';
+      } else if (example === 'wifi') {
+        qrType.value = 'wifi';
+        document.getElementById('wifiSsid').value = 'Office-Guest';
+        document.getElementById('wifiPassword').value = 'Guest@2026';
+        document.getElementById('wifiEncryption').value = 'WPA';
+        document.getElementById('wifiHidden').checked = false;
+      } else if (example === 'contact') {
+        qrType.value = 'vcard';
+        document.getElementById('vcardName').value = '张三';
+        document.getElementById('vcardOrg').value = 'Taugin Studio';
+        document.getElementById('vcardTitle').value = '前端工程师';
+        document.getElementById('vcardPhone').value = '+8613812345678';
+        document.getElementById('vcardEmail').value = 'zhangsan@example.com';
+        document.getElementById('vcardWebsite').value = 'https://example.com';
+        document.getElementById('vcardAddress').value = '上海市浦东新区张江高科技园区';
+        document.getElementById('vcardNote').value = '欢迎联系合作。';
+      } else if (example === 'event') {
+        qrType.value = 'event';
+        document.getElementById('eventTitle').value = '产品评审会议';
+        document.getElementById('eventStart').value = '2026-03-26T14:00';
+        document.getElementById('eventEnd').value = '2026-03-26T15:30';
+        document.getElementById('eventLocation').value = '腾讯会议 123-456-789';
+        document.getElementById('eventDescription').value = '讨论新工具页发布和 SEO 配置。';
+      } else if (example === 'location') {
+        qrType.value = 'geo';
+        document.getElementById('geoLat').value = '31.2304';
+        document.getElementById('geoLng').value = '121.4737';
+        document.getElementById('geoQuery').value = '上海市人民广场';
+      }
+      setQrType(qrType.value);
+      generateQrCode();
+    }
+
+    function clearAll() {
+      inputIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (!element) return;
+        if (element.type === 'checkbox') {
+          element.checked = false;
+        } else if (id === 'errorLevel') {
+          element.value = 'M';
+        } else if (id === 'qrSize') {
+          element.value = '320';
+        } else if (id === 'qrMargin') {
+          element.value = '2';
+        } else if (id === 'darkColor') {
+          element.value = '#111827';
+        } else if (id === 'lightColor') {
+          element.value = '#ffffff';
+        } else {
+          element.value = '';
+        }
+      });
+      setQrType('text');
+      payloadOutput.value = '';
+      currentSvgMarkup = '';
+      qrPreview.innerHTML = '<p class="text-gray-400 text-sm text-center">填写内容后生成二维码</p>';
+      messageArea.classList.add('hidden');
+      chipButtons.forEach((btn, index) => btn.classList.toggle('active', index === 0));
+    }
+
+    typeTabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        setQrType(tab.dataset.type);
+      });
+    });
+
+    inputIds.forEach(id => {
+      const element = document.getElementById(id);
+      if (!element) return;
+      element.addEventListener('input', updatePayload);
+      element.addEventListener('change', updatePayload);
+    });
+
+    document.getElementById('generateBtn').addEventListener('click', generateQrCode);
+    document.getElementById('downloadSvgBtn').addEventListener('click', function() {
+      if (!currentSvgMarkup) generateQrCode();
+      if (!currentSvgMarkup) return;
+      downloadFile(currentSvgMarkup, 'qrcode.svg', 'image/svg+xml;charset=utf-8');
+      showMessage('SVG 已下载。', 'success');
+    });
+    document.getElementById('downloadPngBtn').addEventListener('click', downloadPng);
+    document.getElementById('copyPayloadBtn').addEventListener('click', async function() {
+      updatePayload();
+      if (!payloadOutput.value.trim()) {
+        showMessage('没有可复制的编码内容。', 'error');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(payloadOutput.value);
+      } catch (error) {
+        payloadOutput.select();
+        document.execCommand('copy');
+      }
+      showMessage('编码内容已复制。', 'success');
+    });
+    document.getElementById('clearBtn').addEventListener('click', clearAll);
+    chipButtons.forEach(button => button.addEventListener('click', function() { fillExample(button.dataset.example); }));
+
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.localStorage) {
+        try {
+          const recentToolsData = localStorage.getItem('recentTools');
+          let recentTools = recentToolsData ? JSON.parse(recentToolsData) : [];
+          recentTools = recentTools.filter(id => id !== 'qrcode-generator');
+          recentTools.unshift('qrcode-generator');
+          if (recentTools.length > 6) recentTools = recentTools.slice(0, 6);
+          localStorage.setItem('recentTools', JSON.stringify(recentTools));
+        } catch (error) {
+          console.error('Error recording tool usage:', error);
+        }
+      }
+      setQrType('text');
+      fillExample('website');
+    });
+  </script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script src="../docs/footer-loader.js"></script>
+</body>
+</html>

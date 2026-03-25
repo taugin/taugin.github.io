@@ -231,6 +231,7 @@
                 <a href="tools/base64.html">Base64 编解码</a>
                 <a href="tools/urlencode.html">URL 编解码</a>
                 <a href="tools/timestamp.html">时间戳转换工具</a>
+                <a href="tools/qrcode.html">二维码生成器</a>
               </div>
             </div>
             
@@ -332,6 +333,7 @@
           <a href="tools/base64.html">Base64 编解码</a>
           <a href="tools/urlencode.html">URL 编解码</a>
           <a href="tools/timestamp.html">时间戳转换工具</a>
+          <a href="tools/qrcode.html">二维码生成器</a>
         </div>
       </div>
       
@@ -675,6 +677,26 @@
               </div>
             </div>
           </div>
+
+          <div class="tool-card bg-white rounded-lg shadow overflow-hidden transition-all duration-300">
+            <div class="p-4">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 bg-emerald-100 rounded-md p-2">
+                  <svg class="w-5 h-5 text-emerald-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h3v3H7V7zm0 7h3v3H7v-3zm7-7h3v3h-3V7zm0 7h3v3h-3v-3zM5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2zm8 8h1m-4 0h1m4 4h1m-8 0h1m4 0h1" />
+                  </svg>
+                </div>
+                <div class="ml-3 flex items-center">
+                  <a href="tools/qrcode.html" class="text-lg font-medium text-gray-900 hover:text-indigo-600 transition-colors">
+                    二维码生成器
+                  </a>
+                  <svg class="favorite-icon w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -937,6 +959,13 @@
         description: 'Unix时间戳与日期时间相互转换，获取当前时间戳',
         category: '时间日期类',
         url: 'tools/timestamp.html'
+      },
+      {
+        id: 'qrcode-generator',
+        name: '二维码生成器',
+        description: '支持文本、网址、邮箱、电话、短信、WiFi、名片、地图定位、日程等多种二维码格式',
+        category: '编码解码类',
+        url: 'tools/qrcode.html'
       },
       {
         id: 'md5-hash',
@@ -1299,6 +1328,7 @@
         'url-encoder': 'bg-purple-100',
         'regex-tester': 'bg-red-100',
         'timestamp-converter': 'bg-teal-100',
+        'qrcode-generator': 'bg-emerald-100',
         'md5-hash': 'bg-pink-100',
         'sha-hash': 'bg-purple-100',
         'radix-converter': 'bg-blue-100',
@@ -1318,6 +1348,7 @@
         'url-encoder': 'text-purple-600',
         'regex-tester': 'text-red-600',
         'timestamp-converter': 'text-teal-600',
+        'qrcode-generator': 'text-emerald-600',
         'md5-hash': 'text-pink-600',
         'sha-hash': 'text-purple-600',
         'radix-converter': 'text-blue-600',
@@ -1337,6 +1368,7 @@
         'url-encoder': 'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1',
         'regex-tester': 'M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z',
         'timestamp-converter': 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+        'qrcode-generator': 'M7 7h3v3H7V7zm0 7h3v3H7v-3zm7-7h3v3h-3V7zm0 7h3v3h-3v-3zM5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2zm8 8h1m-4 0h1m4 4h1m-8 0h1m4 0h1',
         'md5-hash': 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
         'sha-hash': 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
         'radix-converter': 'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z',
@@ -1385,6 +1417,7 @@
             'urlencode': 'url-encoder',
             'regex': 'regex-tester',
             'timestamp': 'timestamp-converter',
+            'qrcode': 'qrcode-generator',
             'md5': 'md5-hash',
             'sha': 'sha-hash',
             'radix': 'radix-converter',
@@ -1440,6 +1473,7 @@
             'urlencode': 'url-encoder',
             'regex': 'regex-tester',
             'timestamp': 'timestamp-converter',
+            'qrcode': 'qrcode-generator',
             'md5': 'md5-hash',
             'sha': 'sha-hash',
             'radix': 'radix-converter',
@@ -1515,6 +1549,7 @@
                   'urlencode': 'url-encoder',
                   'regex': 'regex-tester',
                   'timestamp': 'timestamp-converter',
+                  'qrcode': 'qrcode-generator',
                   'md5': 'md5-hash',
                   'sha': 'sha-hash',
                   'radix': 'radix-converter',
